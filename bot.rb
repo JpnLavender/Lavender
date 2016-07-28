@@ -31,14 +31,16 @@ end
 puts "起動！"
 
 client.user do |tweet|
-  Tweet.create(
-    tweet_id: tweet.id, 
-    user_name: tweet.user.screen_name,
-    text: tweet.full_text,
-    img_url: tweet.media.first.expanded_url.to_s
-  )
   case tweet
   when Twitter::Tweet
+    Curl.post(
+      "http://localhost:4567/shtocking_tweet",
+      {
+        tweet_id: tweet.id, 
+        user_name: tweet.user.screen_name,
+        text: tweet.full_text,
+      }.to_json
+    )
     if tweet.text =~ /テスト/
       client_rest.favorite(tweet.id)
       slack_puts(tweet)
@@ -47,7 +49,7 @@ client.user do |tweet|
       slack_puts(tweet)
     end
   when Twitter::Streaming::DeletedTweet
-    if tweet = Tweet.find_by(tweet_id: tweet.id)
+    if tweet.id == JSON.parse(Curl.get("#{host}#{tweet.id}").body_str)["tweet_id"]
       slack_puts("Delete: #{tweet.name}-> #{tweet.text}")
     end
   end
