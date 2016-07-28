@@ -20,7 +20,8 @@ client_rest = Twitter::REST::Client.new do |config|
 end
 
 client.user do |object|
-  if object.is_a?(Twitter::Tweet)
+  case object
+  when Twitter::Tweet
     if object.text =~ /テスト/
       client_rest.favorite(object.id)
       slack_puts("[OK] Now Running Bot... ")
@@ -28,5 +29,7 @@ client.user do |object|
     if object.user.screen_name == "alpdaca"
       slack_puts("@irimamekun  あるぱか→#{object.text}")
     end
+  when Twitter::Streaming::DeletedTweet
+    slack_puts("text->#{object.text}")
   end
 end
