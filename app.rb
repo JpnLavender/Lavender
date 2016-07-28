@@ -3,6 +3,7 @@ require 'curb'
 
 def slack_puts(text)
   Curl.post(ENV['WEBHOOKS'], {channel: "#bot_tech", username: "Lavender", text: text, icon_url: "http://i.imgur.com/Jjwsc.jpg"}.to_json)
+  puts "#{Time.now} 受信"
 end
 
 client = Twitter::Streaming::Client.new do |config|
@@ -18,6 +19,8 @@ client_rest = Twitter::REST::Client.new do |config|
   config.access_token    = ENV["ACCESS_TOKEN"]
   config.access_token_secret = ENV["ACCESS_TOKEN_SECRET"]
 end
+
+puts "起動！"
 
 client.user do |object|
   case object
