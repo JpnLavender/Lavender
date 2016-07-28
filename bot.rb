@@ -3,13 +3,13 @@ require 'curb'
 
 host = ENV['HOST']
 
-def slack_puts(tweet)
+def slack_puts(text)
   Curl.post(
     ENV['WEBHOOKS'],
     { 
       channel: "#bot_tech",
       username: "Lavender ",
-      text: tweet.full_text,
+      text: text,
       icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"
     }.to_json
   )
@@ -35,18 +35,16 @@ puts "起動！"
 client.user do |tweet|
   case tweet
   when Twitter::Tweet
-    p tweet.full_text 
-    json =  { tweet_id: tweet.id, user_name: tweet.user.screen_name, text: tweet.full_text}
-    Curl.post("#{host}stocking_tweet",json )
+    Curl.post("#{host}stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.screen_name, text: tweet.full_text})
     if tweet.text =~ /テスト/
       client_rest.favorite(tweet.id)
-      slack_puts(tweet)
+      slack_puts(tweet.full_text)
     end
     if tweet.user.screen_name == "alpdaca"
-      slack_puts(tweet)
+      slack_puts(tweet.full_text)
     end
   when Twitter::Streaming::DeletedTweet
-    if tweet.id == JSON.parse(Curl.get("#{host}#{tweet.id}").body_str)["tweet_id"]
+    if "#{tweet.id}" == JSON.parse(Curl.get("#{host}#{tweet.id}").body_str)["tweet_id"]
       slack_puts("Delete: #{tweet.name}-> #{tweet.text}")
     else 
       slack_puts("誰かがつい消ししたっぽい")
