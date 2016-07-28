@@ -3,6 +3,10 @@ Bundler.require
 require './models.rb'
 require 'json'
 
+get '/' do
+  "OPPAI"
+end
+
 get '/Lavender/:swich/:id' do
   case params[:swich]
   when "find_tweet"
