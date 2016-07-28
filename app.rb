@@ -1,4 +1,5 @@
 require 'twitter'
+require 'curb'
 
 @slack_config = { username: "Lavender", channel: "#twitter_bot" , icon: "http://i.imgur.com/Jjwsc.jpg" }
 
