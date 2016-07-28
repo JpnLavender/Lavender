@@ -24,11 +24,10 @@ client.user do |object|
   if object.is_a?(Twitter::Tweet)
     if object.text =~ /テスト/
       client_rest.favorite(object.id)
-      send("生存確認を検知レスポンスを返します...")
+      send("[OK] Now Running Bot... ")
     end
     if object.user.screen_name == "alpdaca"
       send("@irimamekun  あるぱか→#{object.text}")
     end
-
   end
 end
