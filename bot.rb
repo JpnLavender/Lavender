@@ -36,7 +36,7 @@ client.user do |tweet|
   case tweet
   when Twitter::Tweet
     puts tweet.full_text 
-    Curl.post("#{host}stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.screen_name, text: tweet.full_text})
+    Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.screen_name, text: tweet.full_text})
     if tweet.text =~ /テスト/
       client_rest.favorite(tweet.id)
       slack_puts(tweet.full_text)
@@ -45,7 +45,7 @@ client.user do |tweet|
       slack_puts("alpdaca -> #{tweet.full_text}")
     end
   when Twitter::Streaming::DeletedTweet
-    data = JSON.parse(Curl.get("#{host}#{tweet.id}").body_str)
+    data = JSON.parse(Curl.get("#{host}/Lavender/find_tweet/#{tweet.id}").body_str)
     if "#{tweet.id}" == data["tweet_id"]
       puts ("Delete: #{data["user_name"]}-> #{data["text"]}")
       slack_puts("Delete: #{data["user_name"]}-> #{data["text"]}")
