@@ -31,6 +31,12 @@ end
 puts "起動！"
 
 client.user do |tweet|
+  Tweet.create(
+    tweet_id: tweet.id, 
+    user_name: tweet.user.screen_name,
+    text: tweet.full_text,
+    img_url: .media.first.expanded_url.to_s
+  )
   case tweet
   when Twitter::Tweet
     if tweet.text =~ /テスト/
@@ -41,8 +47,8 @@ client.user do |tweet|
       slack_puts(tweet)
     end
   when Twitter::Streaming::DeletedTweet
-    name = client_rest.status(tweet.id).screen_name
-    text =  client_rest.status(tweet.id).full_text
-    slack_puts("Delete: #{name}-> #{text}")
+    if tweet = Tweet.find_by(tweet_id: tweet.id)
+      slack_puts("Delete: #{tweet.name}-> #{tweet.text}")
+    end
   end
 end
