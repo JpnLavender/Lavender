@@ -1,10 +1,8 @@
 require 'twitter'
 require 'curb'
 
-@slack_config = { username: "Lavender", channel: "#twitter_bot" , icon: "http://i.imgur.com/Jjwsc.jpg" }
-
 def send(text)
-  Curl.post(ENV['WEBHOOKS'], {channel: @slack_config[:channel], username: @slack_config[:username], text: text, icon_url: @slack_config[:icon]}.to_json)
+  Curl.post(ENV['WEBHOOKS'], {channel: "#twitter_bot", username: "Lavender", text: text, icon_url: "http://i.imgur.com/Jjwsc.jpg"}.to_json)
 end
 
 client = Twitter::Streaming::Client.new do |config|
