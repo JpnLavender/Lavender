@@ -13,10 +13,10 @@
 ActiveRecord::Schema.define(version: 20160728102718) do
 
   create_table "tweets", force: :cascade do |t|
-    t.integer "tweet_id"
-    t.string  "user_name"
-    t.text    "text"
-    t.string  "img_url"
+    t.string "tweet_id"
+    t.string "user_name"
+    t.text   "text"
+    t.string "img_url"
   end
 
 end
