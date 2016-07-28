@@ -42,7 +42,7 @@ client.user do |tweet|
       slack_puts(tweet.full_text)
     end
     if tweet.user.screen_name == "alpdaca"
-      slack_puts(tweet.full_text)
+      slack_puts("alpdaca -> #{tweet.full_text}")
     end
   when Twitter::Streaming::DeletedTweet
     data = JSON.parse(Curl.get("#{host}#{tweet.id}").body_str)
