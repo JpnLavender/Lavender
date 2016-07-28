@@ -45,10 +45,12 @@ client.user do |tweet|
       slack_puts(tweet.full_text)
     end
   when Twitter::Streaming::DeletedTweet
-    if "#{tweet.id}" == JSON.parse(Curl.get("#{host}#{tweet.id}").body_str)["tweet_id"]
-      slack_puts("Delete: #{tweet.name}-> #{tweet.text}")
+    data = JSON.parse(Curl.get("#{host}#{tweet.id}").body_str)
+    if "#{tweet.id}" == data["tweet_id"]
+      puts ("Delete: #{data["user_name"]}-> #{data["text"]}")
+      slack_puts("Delete: #{data["user_name"]}-> #{data["text"]}")
     else 
-      # slack_puts("誰かがつい消ししたっぽい")
+      puts ("誰かがつい消ししたっぽい")
       nil
     end
   end
