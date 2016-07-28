@@ -51,7 +51,6 @@ client.user do |tweet|
       slack_puts("Delete: #{data["user_name"]}-> #{data["text"]}")
     else 
       puts ("誰かがつい消ししたっぽい")
-      nil
     end
   end
 end
