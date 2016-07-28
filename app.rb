@@ -2,7 +2,7 @@ require 'twitter'
 require 'curb'
 
 def send(text)
-  Curl.post(ENV['WEBHOOKS'], {channel: "#twitter_bot", username: "Lavender", text: text, icon_url: "http://i.imgur.com/Jjwsc.jpg"}.to_json)
+  Curl.post(ENV['WEBHOOKS'], {channel: "#bot_tech", username: "Lavender", text: text, icon_url: "http://i.imgur.com/Jjwsc.jpg"}.to_json)
 end
 
 client = Twitter::Streaming::Client.new do |config|
