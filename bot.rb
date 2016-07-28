@@ -1,6 +1,8 @@
 require 'twitter'
 require 'curb'
 
+host = ENV['HOST']
+
 def slack_puts(tweet)
   Curl.post(
     ENV['WEBHOOKS'],
@@ -34,7 +36,7 @@ client.user do |tweet|
   case tweet
   when Twitter::Tweet
     Curl.post(
-      "http://localhost:4567/shtocking_tweet",
+      "#{host}shtocking_tweet",
       {
         tweet_id: tweet.id, 
         user_name: tweet.user.screen_name,
