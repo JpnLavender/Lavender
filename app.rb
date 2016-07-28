@@ -1,8 +1,8 @@
 require 'twitter'
 require 'curb'
 
-def slack_puts(text)
-  Curl.post(ENV['WEBHOOKS'], {channel: "#bot_tech", username: "Lavender", text: text, icon_url: "http://i.imgur.com/Jjwsc.jpg"}.to_json)
+def slack_puts(tweet)
+  Curl.post(ENV['WEBHOOKS'], { channel: "#bot_tech", username: tweet.user.name, text: tweet.full_text, icon_url: tweet.user.profile_image_uri }.to_json)
   puts "#{Time.now} 受信"
 end
 
@@ -22,17 +22,17 @@ end
 
 puts "起動！"
 
-client.user do |object|
-  case object
+client.user do |tweet|
+  case tweet
   when Twitter::Tweet
-    if object.text =~ /テスト/
-      client_rest.favorite(object.id)
-      slack_puts("[OK] Now Running Bot... ")
+    if tweet.text =~ /テスト/
+      client_rest.favorite(tweet.id)
+      slack_puts(tweet)
     end
-    if object.user.screen_name == "alpdaca"
-      slack_puts("@irimamekun  あるぱか→#{object.text}")
+    if tweet.user.screen_name == "alpdaca"
+      slack_puts(tweet)
     end
   when Twitter::Streaming::DeletedTweet
-    slack_puts("text->#{object.text}")
+    slack_puts("text->#{tweet.id}")
   end
 end
