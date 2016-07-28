@@ -1,6 +1,6 @@
 require 'twitter'
 
-@slack_config = { username: "Hibiscus", channel: "#twitter_bot" , icon: "http://i.imgur.com/Jjwsc.jpg" }
+@slack_config = { username: "Lavender", channel: "#twitter_bot" , icon: "http://i.imgur.com/Jjwsc.jpg" }
 
 def send(text)
   Curl.post(ENV['WEBHOOKS'], {channel: @slack_config[:channel], username: @slack_config[:username], text: text, icon_url: @slack_config[:icon]}.to_json)
@@ -24,12 +24,10 @@ client.user do |object|
   if object.is_a?(Twitter::Tweet)
     if object.text =~ /テスト/
       client_rest.favorite(object.id)
-      slack.post "生存確認を検知レスポンスを返します..."
-      puts "生存確認を検知レスポンスを返します..."
+      send("生存確認を検知レスポンスを返します...")
     end
     if object.user.screen_name == "alpdaca"
-      slack.post "@irimamekun  あるぱか→#{object.text}"
-      puts "Tweet by @ni_sosann"
+      send("@irimamekun  あるぱか→#{object.text}")
     end
 
   end
