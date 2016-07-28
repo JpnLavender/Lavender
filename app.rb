@@ -2,7 +2,15 @@ require 'twitter'
 require 'curb'
 
 def slack_puts(tweet)
-  Curl.post(ENV['WEBHOOKS'], { channel: "#bot_tech", username: tweet.user.name, text: tweet.full_text, icon_url: tweet.user.profile_image_uri }.to_json)
+  Curl.post(
+    ENV['WEBHOOKS'],
+    { 
+      channel: "#bot_tech",
+      username: "Lavender ",
+      text: tweet.full_text,
+      icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"
+    }.to_json
+  )
   puts "#{Time.now} 受信"
 end
 
@@ -33,6 +41,8 @@ client.user do |tweet|
       slack_puts(tweet)
     end
   when Twitter::Streaming::DeletedTweet
-    slack_puts("text->#{tweet.id}")
+    name = client_rest.status(tweet.id).screen_name
+    text =  client_rest.status(tweet.id).full_text
+    slack_puts("Delete: #{name}-> #{text}")
   end
 end
