@@ -1,6 +1,7 @@
 require 'bundler/setup'
 Bundler.require
 require './models.rb'
+require 'json'
 
 get '/Lavender/:swich/:id' do
   case params[:swich]
@@ -18,5 +19,5 @@ get '/Lavender/:swich/:id' do
 end
 
 post '/stocking_tweet' do
-  p "Done"
+  Tweet.create(tweet_id: params["tweet_id"], user_name: params["user_name"], text: params["text"])
 end
