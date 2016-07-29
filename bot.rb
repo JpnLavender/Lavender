@@ -39,7 +39,7 @@ client.user do |tweet|
     Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.screen_name, text: tweet.full_text})
     if tweet.text =~ /テスト/
       client_rest.favorite(tweet.id)
-      slack_puts(tweet.full_text)
+      slack_puts("正常に動いてますよ^^")
     end
     if tweet.user.screen_name == "alpdaca"
       slack_puts("alpdaca -> #{tweet.full_text}")
