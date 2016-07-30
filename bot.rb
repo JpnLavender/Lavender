@@ -28,6 +28,19 @@ def option(tweet)
   })
 end
 
+def delete(tweet)
+  slack_puts({
+    attachments: [{
+      author_icon: tweet[:icon],
+      author_name: tweet[:user_name],
+      text: tweet[:text],
+      # image_url: tweet.media,
+      author_link: tweet[:url],
+      color: "red",
+    }]
+  })
+end
+
 client = Twitter::Streaming::Client.new do |config|
   config.consumer_key    = ENV["CONSUMER_KEY"]
   config.consumer_secret = ENV["CONSUMER_SECRET"]
@@ -48,7 +61,7 @@ client.user do |tweet|
   case tweet
   when Twitter::Tweet
     puts "#{tweet.user.name} -> #{tweet.full_text}" 
-    Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.screen_name, text: tweet.full_text})
+    Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url})
     case tweet.text 
     when /テスト/
       client_rest.favorite(tweet.id)
@@ -64,8 +77,7 @@ client.user do |tweet|
   when Twitter::Streaming::DeletedTweet
     data = JSON.parse(Curl.get("#{host}/Lavender/find_tweet/#{tweet.id}").body_str)
     if "#{tweet.id}" == data["tweet_id"]
-      puts ("Delete: #{data["user_name"]}-> #{data["text"]}")
-      slack_puts("Delete: #{data["user_name"]}-> #{data["text"]}")
+      slack_puts(data)
     else 
       puts ("誰かがつい消ししたっぽい")
     end
