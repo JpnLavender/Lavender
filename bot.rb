@@ -61,7 +61,7 @@ puts "起動！"
 client.user do |tweet|
   case tweet
   when Twitter::Tweet
-    puts "#{tweet.user.name} -> #{tweet.full_text}" 
+    puts "#{tweet.user.name} -> #{tweet.full_text}\n\n" 
     Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url})
     case tweet.text 
     when /テスト/
