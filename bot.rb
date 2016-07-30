@@ -20,6 +20,7 @@ def option(tweet)
     attachments: [{
       author_icon: tweet.user.profile_image_url,
       author_name: tweet.user.name,
+      author_subname: "@#{tweet.user.screen_name}",
       text: tweet.full_text,
       image_url: tweet.media,
       author_link: tweet.uri,
