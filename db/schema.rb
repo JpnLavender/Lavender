@@ -10,13 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160728102718) do
+ActiveRecord::Schema.define(version: 20160730120758) do
 
   create_table "tweets", force: :cascade do |t|
     t.string "tweet_id"
     t.string "user_name"
     t.text   "text"
     t.string "img_url"
+    t.string "icon"
+    t.string "url"
+    t.string "media"
   end
 
 end
