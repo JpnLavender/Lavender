@@ -22,7 +22,7 @@ def option(tweet)
       author_name: tweet.user.name,
       author_subname: "@#{tweet.user.screen_name}",
       text: tweet.full_text,
-      image_url: tweet.media,
+      image_url: tweet.media.map{ |img| img.media_uri },
       author_link: tweet.uri,
       color: "red",
     }]
