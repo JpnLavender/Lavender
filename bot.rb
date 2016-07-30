@@ -18,12 +18,12 @@ end
 def option(tweet)
   slack_puts({
     attachments: [{
-      author_icon: tweet.user.profile_img_url,
+      author_icon: tweet.user.profile_image_url,
       author_name: tweet.user.name,
       text: tweet.full_text,
       image_url: tweet.media,
       author_link: tweet.uri,
-      color: red,
+      color: "red",
     }]
   })
 end
