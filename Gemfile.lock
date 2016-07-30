@@ -65,7 +65,6 @@ GEM
     multipart-post (2.0.0)
     naught (1.1.0)
     nio4r (1.2.1)
-    pg (0.18.4)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -111,7 +110,6 @@ DEPENDENCIES
   curb
   eventmachine
   faye-websocket
-  pg
   rake
   sinatra
   sinatra-activerecord

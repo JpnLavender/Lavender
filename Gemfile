@@ -10,10 +10,4 @@ gem 'eventmachine'
 gem 'faye-websocket'
 gem 'curb'
 
-group :development do
-    gem 'sqlite3'
-end
-
-group :production do
-    gem 'pg'
-end
+gem 'sqlite3'
