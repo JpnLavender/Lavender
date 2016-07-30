@@ -1,7 +1,0 @@
-require 'slack/real_time/models/base'
-require 'slack/real_time/models/user'
-require 'slack/real_time/models/bot'
-require 'slack/real_time/models/channel'
-require 'slack/real_time/models/group'
-require 'slack/real_time/models/team'
-require 'slack/real_time/models/im'
