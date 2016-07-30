@@ -32,11 +32,11 @@ end
 def delete(tweet)
   slack_puts({
     attachments: [{
-      author_icon: tweet[:icon],
-      author_name: tweet[:user_name],
-      text: tweet[:text],
+      author_icon: tweet["icon"],
+      author_name: tweet["user_name"],
+      text: tweet["text"],
       # image_url: tweet.media,
-      author_link: tweet[:url],
+      author_link: tweet["url"],
       color: "red",
     }]
   })
