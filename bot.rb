@@ -35,12 +35,15 @@ puts "起動！"
 client.user do |tweet|
   case tweet
   when Twitter::Tweet
-    puts tweet.full_text 
+    puts "#{tweet.user.name} -> #{tweet.full_text}" 
     Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.screen_name, text: tweet.full_text})
     case tweet.text 
     when /テスト/
       client_rest.favorite(tweet.id)
       slack_puts("正常に動いてますよ^^")
+    when /社畜ちゃん/
+      client_rest.favorite(tweet.id)
+      slack_puts("#{tweet.user.name}が呼んでるよ")
     end
     case tweet.user.screen_name 
     when "alpdaca"
