@@ -63,16 +63,8 @@ client.user do |tweet|
   when Twitter::Tweet
     puts "#{tweet.user.name} -> #{tweet.full_text}\n\n" 
     Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url})
-    # case tweet.text 
-    # when /テスト/
-    #   client_rest.favorite(tweet.id)
-    #   slack_puts("正常に動いてますよ^^")
-    # when /社畜ちゃん/
-    #   client_rest.favorite(tweet.id)
-    #   slack_puts("#{tweet.user.name}が呼んでるよ")
-    # end
     case tweet.user.screen_name 
-    when "alpdaca"
+    when "alpdaca" , "ni_sosann" , "usr_meloco" , "serin_inaka", "osrmishi"
       option(tweet)
     end
   when Twitter::Streaming::DeletedTweet
