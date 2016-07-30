@@ -3,17 +3,29 @@ require 'curb'
 
 host = ENV['HOST']
 
-def slack_puts(text)
+def slack_puts(attachments)
   Curl.post(
     ENV['WEBHOOKS'],
     { 
       channel: "#bot_tech",
-      username: "Lavender ",
-      text: text,
+      username: "Lavender",
       icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"
-    }.to_json
+    }.merge(attachments).to_json
   )
   puts "#{Time.now} 受信"
+end
+
+def option(tweet)
+  slack_puts({
+    attachments: [{
+      author_icon: tweet.user.profile_img_url,
+      author_name: tweet.user.name,
+      text: tweet.full_text,
+      image_url: tweet.media,
+      author_link: tweet.uri,
+      color: red,
+    }]
+  })
 end
 
 client = Twitter::Streaming::Client.new do |config|
@@ -47,7 +59,7 @@ client.user do |tweet|
     end
     case tweet.user.screen_name 
     when "alpdaca"
-      slack_puts("alpdaca -> #{tweet.full_text}")
+      option(tweet)
     end
   when Twitter::Streaming::DeletedTweet
     data = JSON.parse(Curl.get("#{host}/Lavender/find_tweet/#{tweet.id}").body_str)
