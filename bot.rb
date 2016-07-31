@@ -1,9 +1,8 @@
 require 'twitter'
 require 'curb'
-
 $host = ENV['HOST']
 
-def slack_puts(attachments)
+def slack_post(attachments)
   Curl.post(
     ENV['WEBHOOKS'],
     { 
@@ -15,7 +14,7 @@ def slack_puts(attachments)
   puts "#{Time.now} 受信"
 end
 
-def option(tweet)
+def slack_post_options(tweet)
     attachments = [{
       author_icon: tweet.user.profile_image_url.to_s,
       author_name: tweet.user.name,
@@ -24,16 +23,15 @@ def option(tweet)
       author_link: tweet.uri.to_s,
       color: "red" }]
     p images = tweet.media.map{ |img| img.media_uri.to_s }
-    slack_puts(attachments)
+    slack_post(attachments)
 end
 
-def delete(tweet)
-  slack_puts({
+def deleted_tweet(tweet)
+  slack_post({
     attachments: [{
       author_icon: tweet["icon"],
       author_name: tweet["user_name"],
       text: "Delete:\n #{tweet["text"]}",
-      # image_url: tweet.media,
       author_link: tweet["url"],
       color: "red",
     }]
@@ -66,16 +64,16 @@ puts "起動！"
 client.user do |tweet|
   case tweet
   when Twitter::Tweet
-    puts "#{tweet.user.name} -> #{tweet.full_text}\n\n" 
+    puts "#{tweet.user.name} -> #{tweet.full_text}\n\n" #テストコード
     database_post(tweet)
     case tweet.user.screen_name 
-    when "alpdaca" , "ni_sosann" , "usr_meloco" , "serin_inaka", "osrmishi"
-      option(tweet)
+    when "alpdaca" , "ni_sosann" , "usr_meloco" , "osrmishi"
+      slack_post_options(tweet)
     end
   when Twitter::Streaming::DeletedTweet
     data = JSON.parse(Curl.get("#{$host}/Lavender/find_tweet/#{tweet.id}").body_str)
     if "#{tweet.id}" == data["tweet_id"]
-      delete(data)
+      deleted_tweet(data)
     else 
       puts ("誰かがつい消ししたっぽい")
     end
