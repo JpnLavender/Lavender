@@ -40,7 +40,7 @@ def delete(tweet)
   })
 end
 
-def stock(tweet)
+def database_post(tweet)
   media = []
   tweet.media{ |img| media << img.media_uri }
   Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url, media: media})
@@ -66,7 +66,7 @@ client.user do |tweet|
   case tweet
   when Twitter::Tweet
     puts "#{tweet.user.name} -> #{tweet.full_text}\n\n" 
-    stock(tweet)
+    database_post(tweet)
     case tweet.user.screen_name 
     when "alpdaca" , "ni_sosann" , "usr_meloco" , "serin_inaka", "osrmishi"
       option(tweet)
