@@ -23,7 +23,7 @@ def option(tweet)
       text: tweet.full_text,
       author_link: tweet.uri,
       color: "red" }]
-    attachments.merge(tweet.media.each { |img| attachments[0].merge({image_url: img.media_uri})})
+    tweet.media.map{ |img| attachments[0].merge!({image_url: img.media_uri})}
     slack_puts(attachments: attachments )
 end
 
@@ -42,7 +42,7 @@ end
 
 def database_post(tweet)
   media = []
-  p tweet.media.each{ |img| media << img.media_uri }
+  tweet.media.map{ |img| media << img.media_uri }
   Curl.post("#{$host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url, media: media})
 end
 
