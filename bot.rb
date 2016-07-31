@@ -17,13 +17,16 @@ end
 
 def option(tweet)
     attachments = [{
-      author_icon: tweet.user.profile_image_url,
+      author_icon: tweet.user.profile_image_url.to_s,
       author_name: tweet.user.name,
       author_subname: "@#{tweet.user.screen_name}",
       text: tweet.full_text,
-      author_link: tweet.uri,
+      author_link: tweet.uri.to_s,
       color: "red" }]
-    tweet.media.map{ |img| attachments[0].merge!({image_url: img.media_uri})}
+    p "メディアの数確認"
+    p tweet.media
+    p "へんなのおおおおおおおおおおおおおおおおおおお"
+    p tweet.media.map{ |img| attachments[0].merge!({image_url: img.media_uri.to_s})}
     slack_puts(attachments: attachments )
 end
 
@@ -32,7 +35,7 @@ def delete(tweet)
     attachments: [{
       author_icon: tweet["icon"],
       author_name: tweet["user_name"],
-      text: tweet["text"],
+      text: "Delete:\n #{tweet["text"]}",
       # image_url: tweet.media,
       author_link: tweet["url"],
       color: "red",
@@ -41,9 +44,17 @@ def delete(tweet)
 end
 
 def database_post(tweet)
-  media = []
-  tweet.media.map{ |img| media << img.media_uri }
-  Curl.post("#{$host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url, media: media})
+  media = tweet.media.map{ |img| [] << img.media_uri }
+  Curl.post(
+    "#{$host}/stocking_tweet", 
+    { 
+      tweet_id: tweet.id,
+      user_name: tweet.user.name,
+      text: tweet.full_text,
+      url:tweet.uri, 
+      icon: tweet.user.profile_image_url,
+      media: media
+  })
 end
 
 client = Twitter::Streaming::Client.new do |config|
