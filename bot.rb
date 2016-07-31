@@ -1,7 +1,7 @@
 require 'twitter'
 require 'curb'
 
-host = ENV['HOST']
+$host = ENV['HOST']
 
 def slack_puts(attachments)
   Curl.post(
@@ -42,8 +42,8 @@ end
 
 def database_post(tweet)
   media = []
-  tweet.media{ |img| media << img.media_uri }
-  Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url, media: media})
+  p tweet.media.each{ |img| media << img.media_uri }
+  Curl.post("#{$host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url, media: media})
 end
 
 client = Twitter::Streaming::Client.new do |config|
@@ -72,7 +72,7 @@ client.user do |tweet|
       option(tweet)
     end
   when Twitter::Streaming::DeletedTweet
-    data = JSON.parse(Curl.get("#{host}/Lavender/find_tweet/#{tweet.id}").body_str)
+    data = JSON.parse(Curl.get("#{$host}/Lavender/find_tweet/#{tweet.id}").body_str)
     if "#{tweet.id}" == data["tweet_id"]
       delete(data)
     else 
