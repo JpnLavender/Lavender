@@ -19,5 +19,11 @@ get '/Lavender/:swich/:id' do
 end
 
 post '/stocking_tweet' do
-  Tweet.create(tweet_id: params["tweet_id"], user_name: params["user_name"], text: params["text"])
+  Tweet.create(tweet_id: params["tweet_id"],
+               user_name: params["user_name"],
+               text: params["text"],
+               icon: params["icon"],
+               url: params["url"],
+               media: params["media"]
+              )
 end
