@@ -16,17 +16,16 @@ def slack_puts(attachments)
 end
 
 def option(tweet)
-  slack_puts({
-    attachments: [{
+    attachments = [{
       author_icon: tweet.user.profile_image_url,
       author_name: tweet.user.name,
       author_subname: "@#{tweet.user.screen_name}",
       text: tweet.full_text,
-      image_url: tweet.media.map{ |img| img.media_uri },
       author_link: tweet.uri,
       color: "red",
     }]
-  })
+    attachments.merge(tweet.media.each { |img| attachments[0].merge({image_url: img.media_uri})})
+    slack_puts(attachments: attachments )
 end
 
 def delete(tweet)
