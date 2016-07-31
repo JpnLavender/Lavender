@@ -23,11 +23,8 @@ def option(tweet)
       text: tweet.full_text,
       author_link: tweet.uri.to_s,
       color: "red" }]
-    p "メディアの数確認"
-    p tweet.media
-    p "へんなのおおおおおおおおおおおおおおおおおおお"
-    p tweet.media.map{ |img| attachments[0].merge!({image_url: img.media_uri.to_s})}
-    slack_puts(attachments: attachments )
+    p images = tweet.media.map{ |img| img.media_uri.to_s }
+    slack_puts(attachments)
 end
 
 def delete(tweet)
@@ -44,17 +41,17 @@ def delete(tweet)
 end
 
 def database_post(tweet)
-  media = tweet.media.map{ |img| [] << img.media_uri }
+  media = tweet.media.map{ |img| img.media_uri.to_s }
   Curl.post(
     "#{$host}/stocking_tweet", 
-    { 
+    ({ 
       tweet_id: tweet.id,
       user_name: tweet.user.name,
       text: tweet.full_text,
       url:tweet.uri, 
       icon: tweet.user.profile_image_url,
       media: media
-  })
+  }).to_json)
 end
 
 client = Twitter::Streaming::Client.new do |config|

@@ -18,13 +18,14 @@ get '/Lavender/:swich/:id' do
   end
 end
 
-post '/stocking_tweet' do
+post '/stocking_tweet', provides: :json do
+  puts data = request.body.read
   Tweet.create(
-    tweet_id: params["tweet_id"],
-    user_name: params["user_name"],
-    text: params["text"],
-    icon: params["icon"],
-    url: params["url"],
-    media: params["media"]
+    tweet_id: data["tweet_id"],
+    user_name: data["user_name"],
+    text: data["text"],
+    icon: data["icon"],
+    url: data["url"],
+    media: data["media"]
   )
 end
