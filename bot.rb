@@ -22,8 +22,7 @@ def option(tweet)
       author_subname: "@#{tweet.user.screen_name}",
       text: tweet.full_text,
       author_link: tweet.uri,
-      color: "red",
-    }]
+      color: "red" }]
     attachments.merge(tweet.media.each { |img| attachments[0].merge({image_url: img.media_uri})})
     slack_puts(attachments: attachments )
 end
@@ -39,6 +38,12 @@ def delete(tweet)
       color: "red",
     }]
   })
+end
+
+def stock(tweet)
+  media = []
+  tweet.media{ |img| media << img.media_uri }
+  Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url, media: media})
 end
 
 client = Twitter::Streaming::Client.new do |config|
@@ -61,7 +66,7 @@ client.user do |tweet|
   case tweet
   when Twitter::Tweet
     puts "#{tweet.user.name} -> #{tweet.full_text}\n\n" 
-    Curl.post("#{host}/stocking_tweet", { tweet_id: tweet.id, user_name: tweet.user.name, text: tweet.full_text, url:tweet.uri, icon: tweet.user.profile_image_url})
+    stock(tweet)
     case tweet.user.screen_name 
     when "alpdaca" , "ni_sosann" , "usr_meloco" , "serin_inaka", "osrmishi"
       option(tweet)
