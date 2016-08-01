@@ -3,9 +3,9 @@ require 'curb'
 $host = ENV['HOST']
 
 def slack_post(attachments)
-    conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
+  conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
   Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
-   JSON.pretty_generate(conf) 
+  puts JSON.pretty_generate(conf)#テストコード追加
 end
 
 def slack_post_options(tweet)
@@ -68,6 +68,7 @@ client.user do |tweet|
   when Twitter::Streaming::DeletedTweet
     data = JSON.parse(Curl.get("#{$host}/Lavender/find_tweet/#{tweet.id}").body_str)
     if "#{tweet.id}" == data["tweet_id"]
+      puts data#テストコード
       deleted_tweet(data)
     else 
       puts ("誰かがつい消ししたっぽい")
