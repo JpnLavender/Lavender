@@ -6,4 +6,6 @@
 
 .bundle/
 
+.ruby-version
+
 .envrc
