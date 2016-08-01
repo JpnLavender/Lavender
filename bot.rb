@@ -22,8 +22,11 @@ def slack_post_options(tweet)
       text: tweet.full_text,
       author_link: tweet.uri.to_s,
       color: "red" }]
-    p images = tweet.media.map{ |img| img.media_uri.to_s }
-    slack_post(attachments)
+    tweet.media.each_with_index do |v,i|
+      attachments[i] ||= {}
+      attachments[i].merge!({image_url: v.media_uri })
+    end
+    slack_post({attachments: attachments})
 end
 
 def deleted_tweet(tweet)

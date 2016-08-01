@@ -4,6 +4,6 @@
 
 /vendor
 
-./bundle
+.bundle/
 
 .envrc
