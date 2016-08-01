@@ -5,6 +5,7 @@ $host = ENV['HOST']
 def slack_post(attachments)
     conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
   Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
+   JSON.pretty_generate(conf) 
 end
 
 def slack_post_options(tweet)
@@ -35,7 +36,6 @@ def deleted_tweet(tweet)
 end
 
 def database_post(tweet)
-  media = tweet.media.map{ |img| img.media_uri.to_s }
   Curl.post(
     "#{$host}/stocking_tweet", 
     ({ 
@@ -44,7 +44,6 @@ def database_post(tweet)
       text: tweet.full_text,
       url:tweet.uri, 
       icon: tweet.user.profile_image_url,
-      media: media
   }).to_json)
 end
 
