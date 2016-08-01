@@ -19,6 +19,7 @@ get '/Lavender/:swich/:id' do
 end
 
 post '/stocking_tweet', provides: :json do
+  data = JSON.parse(request.body.read)
   Tweet.create(
     tweet_id: data["tweet_id"],
     user_name: data["user_name"],
