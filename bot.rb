@@ -9,18 +9,18 @@ def slack_post(attachments)
 end
 
 def slack_post_options(tweet)
-    attachments = [{
-      author_icon: tweet.user.profile_image_url.to_s,
-      author_name: tweet.user.name,
-      author_subname: "@#{tweet.user.screen_name}",
-      text: tweet.full_text,
-      author_link: tweet.uri.to_s,
-      color: "red" }]
-    tweet.media.each_with_index do |v,i|
-      attachments[i] ||= {}
-      attachments[i].merge!({image_url: v.media_uri })
-    end
-    slack_post({attachments: attachments})
+  attachments = [{
+    author_icon: tweet.user.profile_image_url.to_s,
+    author_name: tweet.user.name,
+    author_subname: "@#{tweet.user.screen_name}",
+    text: tweet.full_text,
+    author_link: tweet.uri.to_s,
+    color: "red" }]
+  tweet.media.each_with_index do |v,i|
+    attachments[i] ||= {}
+    attachments[i].merge!({image_url: v.media_uri })
+  end
+  slack_post({attachments: attachments})
 end
 
 def deleted_tweet(tweet)
@@ -44,7 +44,7 @@ def database_post(tweet)
       text: tweet.full_text,
       url:tweet.uri, 
       icon: tweet.user.profile_image_url,
-  }).to_json)
+    }).to_json)
 end
 
 client = Twitter::Streaming::Client.new do |config|
