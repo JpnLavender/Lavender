@@ -15,22 +15,12 @@ def slack_post_options(tweet)
     author_subname: "@#{tweet.user.screen_name}",
     text: tweet.full_text,
     author_link: tweet.uri.to_s,
-    color: "3AA3E3",
-    actions: [
-      {
-        name: "favo",
-        text: "Favo",
-        type: "button",
-        value: "favo"
-      },
-      {
-        name: "rt",
-        text: "RT",
-        type: "button",
-        value: "rt"
-      }
-    ]
-  }]
+    color: tweet.user.profile_link_color
+    actions: [ 
+      { name: "favo", text: "Favo", type: "button", value: "favo" },
+      { name: "rt", text: "RT", type: "button", value: "rt" } 
+    ] 
+  }] 
   tweet.media.each_with_index do |v,i|
     attachments[i] ||= {}
     attachments[i].merge!({image_url: v.media_uri })
@@ -39,8 +29,7 @@ def slack_post_options(tweet)
 end
 
 def deleted_tweet(tweet)
-  slack_post({
-    attachments: [{
+  slack_post({ attachments: [{
       author_icon: tweet["icon"],
       author_name: tweet["user_name"],
       text: "Delete:\n #{tweet["text"]}",
