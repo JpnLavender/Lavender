@@ -15,7 +15,7 @@ def slack_post_options(tweet)
     author_subname: "@#{tweet.user.screen_name}",
     text: tweet.full_text,
     author_link: tweet.uri.to_s,
-    color: tweet.user.profile_link_color
+    color: tweet.user.profile_link_color,
     actions: [ 
       { name: "favo", text: "Favo", type: "button", value: "favo" },
       { name: "rt", text: "RT", type: "button", value: "rt" } 
@@ -72,7 +72,6 @@ client.user do |tweet|
   when Twitter::Streaming::DeletedTweet
     data = JSON.parse(Curl.get("#{$host}/Lavender/find_tweet/#{tweet.id}").body_str)
     if "#{tweet.id}" == data["tweet_id"]
-      puts data#テストコード
       deleted_tweet(data)
     else 
       puts ("誰かがつい消ししたっぽい")

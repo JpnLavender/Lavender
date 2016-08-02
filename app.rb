@@ -1,5 +1,6 @@
 require 'bundler/setup'
 Bundler.require
+require 'sinatra/reloader'
 require './models.rb'
 require 'json'
 
