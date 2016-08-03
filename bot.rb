@@ -15,11 +15,7 @@ def slack_post_options(tweet)
     author_subname: "@#{tweet.user.screen_name}",
     text: tweet.full_text,
     author_link: tweet.uri.to_s,
-    color: tweet.user.profile_link_color,
-    actions: [ 
-      { name: "favo", text: "Favo", type: "button", value: "favo" },
-      { name: "rt", text: "RT", type: "button", value: "rt" } 
-    ] 
+    color: tweet.user.profile_link_color
   }] 
   tweet.media.each_with_index do |v,i|
     attachments[i] ||= {}
