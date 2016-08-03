@@ -15,7 +15,7 @@ Tweet.config.user do |tweet|
     if "#{tweet.id}" == data["tweet_id"]
       Tweet.deleted_tweet(data)
     else 
-      Slappy.say "誰かがつい消ししたっぽい"
+      # Slappy.say "誰かがつい消ししたっぽい"
     end
   end
 end
