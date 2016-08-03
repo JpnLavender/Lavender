@@ -1,10 +1,27 @@
 require 'twitter'
 require 'curb'
+require 'slappy'
 $host = ENV['HOST']
 
+#===config===
+Slappy.configure do |config|
+  config.robot.username   = '藍坂巫女'
+  config.robot.channel    = '#bot_tech'
+  config.robot.icon_url = 'http://goo.gl/5sotqB'
+end
+
+client = Twitter::Streaming::Client.new do |config|
+  config.consumer_key    = ENV["CONSUMER_KEY"]
+  config.consumer_secret = ENV["CONSUMER_SECRET"]
+  config.access_token    = ENV["ACCESS_TOKEN"]
+  config.access_token_secret = ENV["ACCESS_TOKEN_SECRET"]
+end
+#---config---
+
+#===def===
 def slack_post(attachments)
   conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
-  Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
+  ENV["PRODUCTION"] ? Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf)) : nil
   puts JSON.pretty_generate(conf)#テストコード追加
 end
 
@@ -46,16 +63,11 @@ def database_post(tweet)
       icon: tweet.user.profile_image_url,
     }).to_json)
 end
-
-client = Twitter::Streaming::Client.new do |config|
-  config.consumer_key    = ENV["CONSUMER_KEY"]
-  config.consumer_secret = ENV["CONSUMER_SECRET"]
-  config.access_token    = ENV["ACCESS_TOKEN"]
-  config.access_token_secret = ENV["ACCESS_TOKEN_SECRET"]
-end
+#---def---
 
 puts "起動！"
 
+#===twitter===
 client.user do |tweet|
   case tweet
   when Twitter::Tweet
@@ -70,7 +82,8 @@ client.user do |tweet|
     if "#{tweet.id}" == data["tweet_id"]
       deleted_tweet(data)
     else 
-      puts ("誰かがつい消ししたっぽい")
+      Slappy.say "誰かがつい消ししたっぽい"
     end
   end
 end
+#---twitter---
