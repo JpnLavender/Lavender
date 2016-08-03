@@ -1,3 +1,5 @@
+puts "TweetCheckr"
+
 Tweet.config.user do |tweet|
   case tweet
   when Twitter::Tweet 
