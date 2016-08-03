@@ -14,8 +14,8 @@ class Tweet
 
   def self.slack_post(attachments)
     conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
-    ENV["PRODUCTION"] ? nil : Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
-    # Say JSON.pretty_generate(conf)#テスト
+    # ENV["PRODUCTION"] ? nil : Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
+    ENV["PRODUCTION"] ? Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf)) : nil#テスト
     puts JSON.pretty_generate(conf)#テストコード追加
   end
 
@@ -32,11 +32,11 @@ class Tweet
       attachments[i] ||= {}
       attachments[i].merge!({image_url: v.media_uri })
     end
-    slack_post({attachments: attachments})
+    Tweet.slack_post({attachments: attachments})
   end
 
   def self.deleted_tweet(tweet)
-    slack_post({ attachments: [{
+    Tweet.slack_post({ attachments: [{
       author_icon: tweet["icon"],
       author_name: tweet["user_name"],
       text: "Delete:\n #{tweet["text"]}",
