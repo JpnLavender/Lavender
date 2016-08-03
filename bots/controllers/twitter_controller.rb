@@ -39,13 +39,14 @@ class Tweet
   end
 
   def self.deleted_tweet(tweet)
-    Tweet.slack_post({ attachments: [{
-      author_icon: tweet["icon"],
-      author_name: tweet["user_name"],
-      text: "Delete:\n #{tweet["text"]}",
-      author_link: tweet["url"],
-      color: "red",
-    }]
+    Tweet.slack_post({ 
+      attachments: [{
+        author_icon: tweet["icon"],
+        author_name: tweet["user_name"],
+        text: "Delete:\n #{tweet["text"]}",
+        author_link: tweet["url"],
+        color: "red",
+      }]
     })
   end
 
