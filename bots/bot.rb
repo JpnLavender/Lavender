@@ -1,8 +1,7 @@
 require 'twitter'
 require './models.rb'
-puts "起動！"
-p t = Tweet.config
-t.user do |tweet|
+puts "ついけし監視Bot起動！"
+Tweet.config.user do |tweet|
   case tweet
   when Twitter::Tweet
     puts "#{tweet.user.name} -> #{tweet.full_text}\n\n" #テストコード
