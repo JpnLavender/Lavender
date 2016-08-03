@@ -7,5 +7,6 @@ gem 'sinatra-activerecord'#ORマッパー
 gem 'sinatra-contrib'#自動Reload
 gem 'twitter'#TwitterAPI用
 gem 'curb'#RubyでCurlをつかう
+gem 'slappy'
 
 gem 'sqlite3'
