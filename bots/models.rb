@@ -1,6 +1,6 @@
 require 'bundler/setup'
-require './slack_bot_controller'
-require './twitter_controller'
+require './controllers/slack_bot_controller'
+require './controllers/twitter_controller'
 
 class Tweet; end
 

@@ -1,5 +1,6 @@
 require 'twitter'
 require './models.rb'
+
 puts "ついけし監視Bot起動！"
 Tweet.config.user do |tweet|
   case tweet
