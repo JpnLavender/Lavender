@@ -5,11 +5,14 @@ puts "ついけし監視Bot起動！"
 Tweet.config.user do |tweet|
   case tweet
   when Twitter::Tweet
-    puts "#{tweet.user.name} -> #{tweet.full_text}\n\n" #テストコード
     Tweet.database_post(tweet)
     case tweet.user.screen_name 
     when "alpdaca" , "ni_sosann" , "usr_meloco" , "osrmishi"
       Tweet.slack_post_options(tweet)
+    end
+    case tweet
+    when /社畜ちゃん/
+      Slappy.say "#{tweet.user.name}に呼ばれてるよ！\n #{tweet.uri}"
     end
   when Twitter::Streaming::DeletedTweet
     data = JSON.parse(Curl.get("#{$host}/Lavender/find_tweet/#{tweet.id}").body_str)
