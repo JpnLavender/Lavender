@@ -6,8 +6,8 @@ $host = ENV['HOST']
 #===config===
 Slappy.configure do |config|
   config.robot.username   = '藍坂巫女'
-  config.robot.channel    = '#bot_tech'
-  config.robot.icon_url = 'http://goo.gl/5sotqB'
+  config.robot.channel    = 'bot_tech'
+  config.robot.icon_url   = 'http://goo.gl/5sotqB'
 end
 
 client = Twitter::Streaming::Client.new do |config|
@@ -21,7 +21,7 @@ end
 #===def===
 def slack_post(attachments)
   conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
-  ENV["PRODUCTION"] ? Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf)) : nil
+  ENV["PRODUCTION"] ? nil : Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
   puts JSON.pretty_generate(conf)#テストコード追加
 end
 
