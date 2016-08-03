@@ -1,5 +1,7 @@
+require 'twitter'
 require './models.rb'
 puts "起動！"
+p Tweet.config
 Tweet.config.user do |tweet|
   case tweet
   when Tweet::Tweet
