@@ -2,8 +2,12 @@ require './models.rb'
 
 puts "SlackBot起動!"
 
-hear /test/ do |event|
-  say "てすと！！！", channel: event.channel
+hear /test|テスト/ do |event|
+  say "[OK] ALL System Not Warning", channel: event.channel
+end
+
+hear /ClassTest/ do |event|
+  say "#{Twitter.class}&#{Twitter}", channel: event.channel
 end
 
 # hear /help|-h/ do |event|
@@ -15,13 +19,13 @@ end
 hear /DeleteBotStop|deletetweetstop/ do |event|
   say "了解です!!終了していますので少々お待ちを!!", channel: event.channel 
   Tweet.stop("DeleteBotStop")
-  say "つい消しアラートのBotを停止しました!!"
+  say "つい消しアラートのBotを停止しました!! -> #{$deleted_streaming}"
 end
 
 hear /StreamingStop|streamingstop/ do |event|
   say "了解です!!終了していますので少々お待ちを!!", channel: event.channel 
   Tweet.stop("StreamingStop")
-  say "お気に入りフォロワーストリーミングのBotを停止しました!!", channel: event.channel 
+  say "お気に入りフォロワーストリーミングのBotを停止しました!!->#{$streaming}", channel: event.channel 
 end
 
 Slappy.start

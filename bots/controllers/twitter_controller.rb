@@ -4,6 +4,8 @@ $host = ENV['HOST']
 $streaming = true
 $deleted_streaming = true
 
+puts "TwitterController"
+
 class Tweet
   def self.config
     @client = Twitter::Streaming::Client.new do |config|
@@ -67,9 +69,9 @@ class Tweet
   def self.stop(bot_name)
     case bot_name
     when "StreamingStop"
-      $streaming = false
+      p $streaming = false
     when "DeleteBotStop"
-      $deleted_streaming = false
+      p $deleted_streaming = false
     end
   end
 
