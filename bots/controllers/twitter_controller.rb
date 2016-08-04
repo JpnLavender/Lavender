@@ -1,5 +1,6 @@
 require 'twitter'
 require 'curb'
+require 'hashie'
 $host = ENV['HOST']
 $streaming = true
 $deleted_streaming = true
@@ -27,6 +28,9 @@ class Tweet
   end
 
   def self.slack_post_options(tweet)
+    if tweet.class.to_s == "String"
+      tweet = Hashie::Mash.new tweet
+    end
     attachments = [{
       author_icon: tweet.user.profile_image_url.to_s,
       author_name: tweet.user.name,
@@ -42,27 +46,17 @@ class Tweet
     Tweet.slack_post({attachments: attachments})
   end
 
-  def self.deleted_tweet(tweet)
-    Tweet.slack_post({ 
-      attachments: [{
-        author_icon: tweet["icon"],
-        author_name: tweet["user_name"],
-        text: "Delete:\n #{tweet["text"]}",
-        author_link: tweet["url"],
-        color: "red",
-      }]
-    })
-  end
-
   def self.database_post(tweet)
     Curl.post(
       "#{$host}/stocking_tweet", 
       ({ 
         tweet_id: tweet.id,
+        name: tweet.user.screen_name,
         user_name: tweet.user.name,
         text: tweet.full_text,
-        url:tweet.uri, 
         icon: tweet.user.profile_image_url,
+        url:tweet.uri, 
+        color: tweet.profile_link_color
       }).to_json)
   end
 
