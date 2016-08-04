@@ -1,4 +1,5 @@
 require 'slappy'
+require 'slappy/dsl'
 
 puts "SlackBot起動!"
 class SlackBot
@@ -8,3 +9,9 @@ class SlackBot
     config.robot.icon_url   = 'http://goo.gl/5sotqB'
   end
 end
+
+hear /test/ do |event|
+  say "てすと！！！", channel: event.channel
+end
+
+# Slappy.start
