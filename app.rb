@@ -16,7 +16,7 @@ get '/Lavender/:swich/:id' do
         tweet_id: tweet.tweet_id,
         user: {
           name: tweet.screen_name,
-          screen_name: tweet.user.name,
+          screen_name: tweet.user_name,
           profile_image_url: tweet.icon,
           profile_link_color: tweet.color 
         }, 
