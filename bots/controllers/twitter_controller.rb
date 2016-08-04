@@ -1,6 +1,8 @@
 require 'twitter'
 require 'curb'
 $host = ENV['HOST']
+$streaming = true
+$deleted_streaming = true
 
 class Tweet
   def self.config
@@ -61,4 +63,14 @@ class Tweet
         icon: tweet.user.profile_image_url,
       }).to_json)
   end
+
+  def self.stop(bot_name)
+    case bot_name
+    when "StreamingStop"
+      $streaming = false
+    when "DeleteBotStop"
+      $deleted_streaming = false
+    end
+  end
+
 end
