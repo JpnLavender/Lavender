@@ -114,6 +114,7 @@ PLATFORMS
 
 DEPENDENCIES
   curb
+  hashie
   rake
   sinatra
   sinatra-activerecord
