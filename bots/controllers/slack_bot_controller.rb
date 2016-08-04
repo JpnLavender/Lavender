@@ -1,7 +1,6 @@
 require 'slappy'
 require 'slappy/dsl'
 
-puts "SlackBot起動!"
 class SlackBot
   Slappy.configure do |config|
     config.robot.username   = '藍坂巫女'
