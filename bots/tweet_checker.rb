@@ -1,7 +1,7 @@
 puts "TweetCheckr"
 require './models.rb'
 
-Tweet.config.user do |tweet|
+Tweeted.config.user do |tweet|
   case tweet
   when Twitter::Tweet 
     case tweet

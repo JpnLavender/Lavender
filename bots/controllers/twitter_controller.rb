@@ -7,7 +7,7 @@ $deleted_streaming = true
 
 puts "TwitterController"
 
-class Tweet
+class Tweeted
   def self.config
     @client = Twitter::Streaming::Client.new do |config|
       config.consumer_key    = ENV["CONSUMER_KEY"]
@@ -43,7 +43,7 @@ class Tweet
       attachments[i] ||= {}
       attachments[i].merge!({image_url: v.media_uri })
     end
-    Tweet.slack_post({attachments: attachments})
+    Tweeted.slack_post({attachments: attachments})
   end
 
   def self.database_post(tweet)
@@ -56,7 +56,7 @@ class Tweet
         text: tweet.full_text,
         icon: tweet.user.profile_image_url,
         url:tweet.uri, 
-        color: tweet.profile_link_color
+        color: tweet.user.profile_link_color
       }).to_json)
   end
 
