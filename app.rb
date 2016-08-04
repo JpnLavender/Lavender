@@ -33,7 +33,7 @@ post '/stocking_tweet', provides: :json do
   data = JSON.parse(request.body.read)
   Tweet.create(
     tweet_id: data["tweet_id"],
-    name: data["name"],
+    screen_name: data["name"],
     user_name: data["user_name"],
     text: data["text"],
     icon: data["icon"],
