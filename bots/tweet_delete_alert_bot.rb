@@ -1,4 +1,5 @@
 require 'twitter'
+require './models.rb'
 
 puts "ついけし監視Bot起動！"
 

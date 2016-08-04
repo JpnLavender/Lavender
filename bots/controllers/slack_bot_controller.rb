@@ -10,8 +10,4 @@ class SlackBot
   end
 end
 
-hear /test/ do |event|
-  say "てすと！！！", channel: event.channel
-end
 
-# Slappy.start
