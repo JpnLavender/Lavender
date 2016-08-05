@@ -14,14 +14,14 @@ get '/Lavender/:swich/:id' do
     if tweet = Tweet.find_by(tweet_id: params[:id])
       { 
         tweet_id: tweet.tweet_id,
+        full_text: tweet.text,
+        uri: tweet.url,
         user: {
           name: tweet.screen_name,
           screen_name: tweet.user_name,
           profile_image_url: tweet.icon,
           profile_link_color: tweet.color 
-        }, 
-        full_text: tweet.text,
-        uri: tweet.url 
+        } 
       }.to_json 
     else
       {error: "404"}.to_json 
