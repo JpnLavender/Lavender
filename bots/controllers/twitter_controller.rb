@@ -18,19 +18,17 @@ class Tweeted
   end
 
   def self.slack_post(attachments)
-    conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
-    if ENV["PRODUCTION"] 
+    unless ENV["PRODUCTION"] 
       nil 
     else
+      conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
       Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
       puts JSON.pretty_generate(conf)
     end
   end
 
   def self.slack_post_options(tweet)
-    if tweet.class.to_s == "String"
-      tweet = Hashie::Mash.new tweet
-    end
+    tweet[:type] == "delete" ? tweet = (Hashie::Mash.new tweet) : nil
     attachments = [{
       author_icon: tweet.user.profile_image_url.to_s,
       author_name: tweet.user.name,
@@ -63,9 +61,11 @@ class Tweeted
   def self.stop(bot_name)
     case bot_name
     when "StreamingStop"
-      p $streaming = false
+      $streaming = false
+      p "ユーザー監視を停止しました"
     when "DeleteBotStop"
-      p $deleted_streaming = false
+      $deleted_streaming = false
+      p "ついけし監視を停止しました"
     end
   end
 
