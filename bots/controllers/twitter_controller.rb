@@ -28,7 +28,7 @@ class Tweeted
   end
 
   def self.slack_post_options(tweet)
-    tweet[:type] == "delete" ? tweet = (Hashie::Mash.new tweet) : nil
+    tweet[:typing] == "delete" ? tweet = (Hashie::Mash.new tweet) : nil
     attachments = [{
       author_icon: tweet.user.profile_image_url.to_s,
       author_name: tweet.user.name,
