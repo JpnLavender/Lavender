@@ -18,14 +18,19 @@ end
 
 hear /DeleteBotStop|deletetweetstop/ do |event|
   say "了解です!!終了していますので少々お待ちを!!", channel: event.channel 
-  Tweet.stop("DeleteBotStop")
-  say "つい消しアラートのBotを停止しました!! -> #{$deleted_streaming}"
+  Tweeted.stop("DeleteBotStop")
+  say "つい消しアラートのBotを停止しました!! -> #{$deleted_streaming}", channel: event.channel
 end
 
 hear /StreamingStop|streamingstop/ do |event|
   say "了解です!!終了していますので少々お待ちを!!", channel: event.channel 
-  Tweet.stop("StreamingStop")
+  Tweeted.stop("StreamingStop")
   say "お気に入りフォロワーストリーミングのBotを停止しました!!->#{$streaming}", channel: event.channel 
+end
+
+hear /status|Status/ do |event|
+  say "つい消し -> #{$deleted_streaming}", channel: event.channel
+  say "ユーザー -> #{$streaming}", channel: event.channel
 end
 
 Slappy.start
