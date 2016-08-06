@@ -6,31 +6,35 @@ hear /test|テスト/ do |event|
   say "[OK] ALL System Not Warning", channel: event.channel
 end
 
-hear /ClassTest/ do |event|
-  say "#{Twitter.class}&#{Twitter}", channel: event.channel
-end
-
-# hear /help|-h/ do |event|
-#   say "テスト -> test" , channel: event.channel
-#   say "つい消しアラートストップ -> DeleteBotStop", channel: event.channel
-#   say "フォロワーストリーミングストップ -> StreamingStop", channel: event.channel
-# end
-
-hear /DeleteBotStop|deletetweetstop/ do |event|
-  say "了解です!!終了していますので少々お待ちを!!", channel: event.channel 
-  Tweeted.stop("DeleteBotStop")
-  say "つい消しアラートのBotを停止しました!! -> #{$deleted_streaming}", channel: event.channel
-end
-
-hear /StreamingStop|streamingstop/ do |event|
-  say "了解です!!終了していますので少々お待ちを!!", channel: event.channel 
-  Tweeted.stop("StreamingStop")
-  say "お気に入りフォロワーストリーミングのBotを停止しました!!->#{$streaming}", channel: event.channel 
-end
-
 hear /status|Status/ do |event|
-  say "つい消し -> #{$deleted_streaming}", channel: event.channel
-  say "ユーザー -> #{$streaming}", channel: event.channel
+  say "Delete Streaming -> #{$deleted_streaming}", channel: event.channel
+  say "User Streaming -> #{$streaming}", channel: event.channel
+end
+
+#===BotStop===
+hear /DeleteStreamingStop/ do |event|
+  say "OK... ,Delete Streaming Start Setting Now ,Wait Press", channel: event.channel 
+  Tweeted.stop("DeleteBotStop")
+  say "Setting All Complete, User Streaming Stop!!-> #{$deleted_streaming}", channel: event.channel
+end
+
+hear /StreamingStop/ do |event|
+  say "OK... ,User Streaming Start Setting Now ,Wait Press", channel: event.channel 
+  Tweeted.stop("StreamingStop")
+  say "Setting All Complete, User Streaming Stop!!->#{$streaming}", channel: event.channel 
+end
+
+#===BotStart===
+hear /DeleteStreamingStart/ do |event|
+  say "OK... ,Delete Streaming Start Setting Now ,Wait Press", channel: event.channel 
+  Tweeted.start("StreamingStop")
+  say "Setting All Complete, Delete Streaming Start!->#{$streaming}", channel: event.channel 
+end
+
+hear /UserStreamingStart/ do |event|
+  say "OK... ,User Streaming Start Setting Now ,Wait Press", channel: event.channel 
+  Tweeted.start("StreamingStop")
+  say "Setting All Complete, User Streaming Start!->#{$streaming}", channel: event.channel 
 end
 
 Slappy.start

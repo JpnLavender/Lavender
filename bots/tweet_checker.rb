@@ -12,6 +12,7 @@ Tweeted.config.user do |tweet|
     end
     case tweet.user.screen_name 
     when "alpdaca" , "ni_sosann" , "usr_meloco" , "osrmishi"
+      puts $streaming 
       $streaming ? Tweeted.slack_post_options(tweet) : "この機能は現在停止中です" 
     end
   end
