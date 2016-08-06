@@ -8,7 +8,7 @@ Slappy.configure do |config|
 end
 
 
-class SlackBot
+class Slack
   def self.send(message)
     say(message)
   end
