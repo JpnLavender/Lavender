@@ -7,6 +7,10 @@ class SlackBot
     config.robot.channel    = 'bot_tech'
     config.robot.icon_url   = 'http://goo.gl/5sotqB'
   end
+
+  def self.send(message)
+    say message , channel: event.channel
+  end
 end
 
 
