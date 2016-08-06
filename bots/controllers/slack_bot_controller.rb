@@ -9,8 +9,8 @@ end
 
 
 class Slack
-  def self.send(message)
-    say(message)
+  def self.send(event, message)
+    say (message), channel: event.channel
   end
 end
 
