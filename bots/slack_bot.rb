@@ -7,7 +7,7 @@ hear /test/i do |event|
 end
 
 hear /status/i do |event|
-  "Delete Streaming -> #{$deleted_streaming}")
+  SlackBot.send("Delete Streaming -> #{$deleted_streaming}")
   SlackBot.send("User Streaming -> #{$streaming}")
 end
 
