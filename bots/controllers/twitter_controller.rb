@@ -18,6 +18,15 @@ class Tweet
       end
     end
 
+    def config_rest
+      @client_rest = Twitter::REST::Client.new do |config|
+        config.consumer_key    = ENV["CONSUMER_KEY"]
+        config.consumer_secret = ENV["CONSUMER_SECRET"]
+        config.access_token    = ENV["ACCESS_TOKEN"]
+        config.access_token_secret = ENV["ACCESS_TOKEN_SECRET"]
+      end
+    end
+
     def slack_post(attachments)
       unless ENV["PRODUCTION"] 
         nil 
@@ -57,6 +66,9 @@ class Tweet
           url:tweet.uri, 
           color: tweet.user.profile_link_color
         }).to_json)
+    end
+    def list_join_members(list_id)
+      Tweet.config_rest.list_members(list_id, count: 1000).map{ |user| user.screen_name }
     end
   end
 
