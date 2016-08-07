@@ -11,7 +11,7 @@ class Tweet
   class << self
 
     def config
-      @client = Twitter::Streaming::Client.new do |config|
+      Twitter::Streaming::Client.new do |config|
         config.consumer_key    = ENV["CONSUMER_KEY"]
         config.consumer_secret = ENV["CONSUMER_SECRET"]
         config.access_token    = ENV["ACCESS_TOKEN"]
@@ -20,7 +20,7 @@ class Tweet
     end
 
     def config_rest
-      @client_rest = Twitter::REST::Client.new do |config|
+      Twitter::REST::Client.new do |config|
         config.consumer_key    = ENV["CONSUMER_KEY"]
         config.consumer_secret = ENV["CONSUMER_SECRET"]
         config.access_token    = ENV["ACCESS_TOKEN"]
