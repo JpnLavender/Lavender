@@ -9,6 +9,7 @@ puts "TwitterController"
 
 class Tweet
   class << self
+
     def config
       @client = Twitter::Streaming::Client.new do |config|
         config.consumer_key    = ENV["CONSUMER_KEY"]
@@ -67,9 +68,11 @@ class Tweet
           color: tweet.user.profile_link_color
         }).to_json)
     end
+
     def list_join_members(list_id)
       Tweet.config_rest.list_members(list_id, count: 1000).map{ |user| user.screen_name }
     end
+
   end
 
   class DeletedStreaming < Tweet
