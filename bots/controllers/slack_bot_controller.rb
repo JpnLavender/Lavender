@@ -7,11 +7,8 @@ Slappy.configure do |config|
   config.robot.icon_url   = 'http://goo.gl/5sotqB'
 end
 
-
-class Slack
+class SlackBot
   def self.send(event, message)
     say (message), channel: event.channel
   end
 end
-
-
