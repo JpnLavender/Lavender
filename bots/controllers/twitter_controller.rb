@@ -72,7 +72,9 @@ class Tweet
     def list_join_members(list_id)
       Tweet.config_rest.list_members(list_id, count: 1000).map{ |user| user.screen_name }
     end
-
+    def tweet(text)
+      Tweet.config_rest.update(text)
+    end
   end
 
   class DeletedStreaming < Tweet

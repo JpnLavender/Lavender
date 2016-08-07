@@ -37,4 +37,8 @@ hear /^UserStreamingStart/i do |e|
   SlackBot.send(e,"Setting All Complete, User Streaming Start!->#{$user_streaming}") 
 end
 
+hear /^Tweet/i do |e|
+  Tweet.tweet(e.test)
+end
+
 Slappy.start
