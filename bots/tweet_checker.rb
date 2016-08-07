@@ -3,7 +3,7 @@ require './models.rb'
 
 puts "ユーザー監視 -> #{$streaming}"
 
-Tweeted.config.user do |tweet|
+Tweet.config.user do |tweet|
   case tweet
   when Twitter::Tweet 
     case tweet.full_text 
@@ -13,7 +13,7 @@ Tweeted.config.user do |tweet|
     case tweet.user.screen_name 
     when "alpdaca" , "ni_sosann" , "usr_meloco" , "osrmishi"
       puts $streaming 
-      $streaming ? Tweeted.slack_post_options(tweet) : "この機能は現在停止中です" 
+      $streaming ? Tweet.slack_post_options(tweet) : "この機能は現在停止中です" 
     end
   end
 end

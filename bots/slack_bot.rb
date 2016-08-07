@@ -14,26 +14,26 @@ end
 #===BotStop===
 hear /DeleteStreamingStop/i do |e|
   Slack.send("OK... ,Delete Streaming Start Setting Now ,Wait Press") 
-  Tweeted.stop(e, "DeleteBotStop")
+  Tweet.stop(e, "DeleteBotStop")
   Slack.send("Setting All Complete, User Streaming Stop!!-> #{$deleted_streaming}")
 end
 
 hear /StreamingStop/i do |e|
   Slack.send(e, "OK... ,User Streaming Start Setting Now ,Wait Press") 
-  Tweeted.stop("StreamingStop")
+  Tweet.stop("StreamingStop")
   Slack.send(e, "Setting All Complete, User Streaming Stop!!->#{$streaming}") 
 end
 
 #===BotStart===
 hear /DeleteStreamingStart/i do |e|
   Slack.send(e, "OK... ,Delete Streaming Start Setting Now ,Wait Press") 
-  Tweeted.start(e, "StreamingStop")
+  Tweet.start(e, "StreamingStop")
   Slack.send(e, "Setting All Complete, Delete Streaming Start!->#{$streaming}") 
 end
 
 hear /UserStreamingStart/i do |e|
   Slack.send(e, "OK... ,User Streaming Start Setting Now ,Wait Press") 
-  Tweeted.start("StreamingStop")
+  Tweet.start("StreamingStop")
   Slack.send(e,"Setting All Complete, User Streaming Start!->#{$streaming}") 
 end
 
