@@ -1,7 +1,7 @@
 puts "TweetCheckr"
 require './models.rb'
 
-puts "ユーザー監視 -> #{$streaming}"
+puts "ユーザー監視 -> #{$user_streaming}"
 
 Tweet.config.user do |tweet|
   case tweet
@@ -12,8 +12,8 @@ Tweet.config.user do |tweet|
     end
     case tweet.user.screen_name 
     when "alpdaca" , "ni_sosann" , "usr_meloco" , "osrmishi"
-      puts $streaming 
-      $streaming ? Tweet.slack_post_options(tweet) : "この機能は現在停止中です" 
+      puts $user_streaming 
+      $user_streaming ? Tweet.slack_post_options(tweet) : "この機能は現在停止中です" 
     end
   end
 end

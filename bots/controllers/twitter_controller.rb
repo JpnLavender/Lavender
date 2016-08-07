@@ -2,7 +2,7 @@ require 'twitter'
 require 'curb'
 require 'hashie'
 $host = ENV['HOST']
-$streaming = true
+$user_streaming = true
 $deleted_streaming = true
 
 puts "TwitterController"
@@ -58,19 +58,23 @@ class Tweet
           color: tweet.user.profile_link_color
         }).to_json)
     end
+  end
 
-    def stop(bot_name)
-      case bot_name
-      when "StreamingStop"
-        $streaming = false
-        p "ユーザー監視を停止しました"
-      when "DeleteBotStop"
-        $deleted_streaming = false
-        p "ついけし監視を停止しました"
-      end
+  class DeletedStreaming < Tweet
+    def self.stop!
+      $deleted_streaming = false
     end
+    def self.start!
+      $deleted_streaming = true
+    end
+  end
 
-    def start(bot_name)
+  class UserStreaming < Tweet
+     def self.stop!
+       $user_streaming = false
+    end
+    def self.start!
+      $user_streaming = true
     end
   end
 end
