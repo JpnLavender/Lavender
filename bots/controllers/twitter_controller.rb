@@ -48,9 +48,11 @@ class Tweet
         author_link: tweet.uri.to_s,
         color: tweet.user.profile_link_color
       }] 
-      tweet.media.each_with_index do |v,i|
-        attachments[i] ||= {}
-        attachments[i].merge!({image_url: v.media_uri })
+      if tweet.media
+        tweet.media.each_with_index do |v,i|
+          attachments[i] ||= {}
+          attachments[i].merge!({image_url: v.media_uri })
+        end
       end
       Tweet.slack_post({attachments: attachments})
     end

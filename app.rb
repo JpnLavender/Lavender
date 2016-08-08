@@ -16,6 +16,7 @@ get '/Lavender/:swich/:id' do
         tweet_id: tweet.tweet_id,
         full_text: tweet.text,
         uri: tweet.url,
+        media: nil,
         user: {
           name: tweet.screen_name,
           screen_name: tweet.user_name,
