@@ -38,7 +38,8 @@ hear /^UserStreamingStart/i do |e|
 end
 
 hear /^Tweet/i do |e|
-  Tweet.tweet(e.test)
+  Tweet.tweet(e.text)
+  SlackBot.send(e, "Done!Tweet!")
 end
 
 Slappy.start
