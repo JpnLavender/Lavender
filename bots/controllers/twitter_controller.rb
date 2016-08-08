@@ -35,7 +35,6 @@ class Tweet
     end
 
     def slack_post_options(tweet)
-      tweet.class == Twitter::Tweet ? nil : tweet = (Hashie::Mash.new tweet)
       attachments = [{
         author_icon: tweet.user.profile_image_url.to_s,
         author_name: tweet.user.name,
