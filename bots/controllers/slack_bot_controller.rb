@@ -9,6 +9,6 @@ end
 
 class SlackBot
   def self.send(event, message)
-    say (message), channel: event.channel
+    Slappy.say (message), channel: event.channel
   end
 end
