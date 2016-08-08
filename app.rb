@@ -12,7 +12,7 @@ get '/Lavender/:swich/:id' do
   case params[:swich]
   when "find_tweet"
     if tweet = Tweet.find_by(tweet_id: params[:id])
-      { 
+      {
         tweet_id: tweet.tweet_id,
         full_text: tweet.text,
         uri: tweet.url,
@@ -21,11 +21,11 @@ get '/Lavender/:swich/:id' do
           name: tweet.screen_name,
           screen_name: tweet.user_name,
           profile_image_url: tweet.icon,
-          profile_link_color: tweet.color 
-        } 
-      }.to_json 
+          profile_link_color: tweet.color
+        }
+      }.to_json
     else
-      {error: "404"}.to_json 
+      {error: "404"}.to_json
     end
   end
 end

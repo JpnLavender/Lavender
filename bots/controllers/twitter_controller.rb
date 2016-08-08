@@ -54,7 +54,7 @@ class Tweet
 
     def database_post(tweet)
       Curl.post(
-        "#{$host}/stocking_tweet", 
+        "#{$host}/stocking_tweet",
         ({ 
           tweet_id: tweet.id,
           name: tweet.user.screen_name,
