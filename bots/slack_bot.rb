@@ -39,7 +39,7 @@ end
 
 hear /^Tweet: / do |e|
   Tweet.tweet( e.text.delete("Tweet: "))
-  SlackBot.send(e, "Done!Tweet!")
+  SlackBot.send(e, "Success!Tweet!")
 end
 
 Slappy.start
