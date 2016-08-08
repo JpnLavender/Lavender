@@ -29,13 +29,9 @@ class Tweet
     end
 
     def slack_post(attachments)
-      unless ENV["PRODUCTION"] 
-        nil 
-      else
-        conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
-        Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
-        puts JSON.pretty_generate(conf)
-      end
+      conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
+      Curl.post( ENV['WEBHOOKS'],JSON.pretty_generate(conf))
+      puts JSON.pretty_generate(conf)
     end
 
     def slack_post_options(tweet)
