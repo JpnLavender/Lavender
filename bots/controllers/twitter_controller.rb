@@ -41,7 +41,21 @@ class Tweet
         author_subname: "@#{tweet.user.screen_name}",
         text: tweet.full_text,
         author_link: tweet.uri.to_s,
-        color: tweet.user.profile_link_color
+        color: tweet.user.profile_link_color,
+        actions: [
+          {
+            name: "favo",
+            text: "Favo",
+            type: "button",
+            value: "favo"
+          },
+          {
+            name: "rt",
+            text: "RT",
+            type: "button",
+            value: "rt"
+          }
+        ]
       }] 
       if tweet.media
         tweet.media.each_with_index do |v,i|
@@ -69,6 +83,7 @@ class Tweet
     def list_join_members(list_id)
       Tweet.config_rest.list_members(list_id, count: 1000).map{ |user| user.screen_name }
     end
+
     def tweet(text)
       Tweet.config_rest.update(text)
     end
