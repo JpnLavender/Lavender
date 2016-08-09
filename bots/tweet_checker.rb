@@ -5,8 +5,7 @@ puts "ユーザー監視 -> #{$user_streaming}"
 favo_user = Tweet.list_join_members(762160635719225344)
 
 Tweet.config.user do |tweet|
-  case tweet
-  when Twitter::Tweet
+  if tweet == Twitter::Tweet
     Tweet.database_post(tweet)
     case tweet.full_text
     when /社畜ちゃん/
