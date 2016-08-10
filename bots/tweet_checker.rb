@@ -2,7 +2,7 @@ puts "TweetCheckr"
 require './models.rb'
 
 puts "ユーザー監視 -> #{$user_streaming}"
-favo_user = Tweet.list_join_members(762160635719225344)
+favo_user = Tweet.list_join_members(763286476729704449)
 
 Tweet.config.user do |tweet|
   if tweet.class == Twitter::Tweet
