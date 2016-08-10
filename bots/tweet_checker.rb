@@ -6,7 +6,7 @@ favo_user = Tweet.list_join_members(762160635719225344)
 
 Tweet.config.user do |tweet|
   if tweet.class == Twitter::Tweet
-    Tweet.database_post(tweet); puts "きたあああああああ"
+    Tweet.database_post(tweet)
     case tweet.full_text
     when /社畜ちゃん/
       Slappy.say "#{tweet.user.name}に呼ばれてるよ！\n #{tweet.uri}"
