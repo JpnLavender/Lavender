@@ -7,10 +7,6 @@ favo_user = Tweet.list_join_members(763286476729704449)
 Tweet.config.user do |tweet|
   if tweet.class == Twitter::Tweet
     Tweet.database_post(tweet)
-    case tweet.full_text
-    when /社畜ちゃん/
-      Slappy.say "#{tweet.user.name}に呼ばれてるよ！\n #{tweet.uri}"
-    end
     case tweet.user.screen_name
     when *favo_user
       puts $user_streaming
