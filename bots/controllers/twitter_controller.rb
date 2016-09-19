@@ -1,32 +1,3 @@
-require 'twitter'
-require 'curb'
-require 'hashie'
-$host = ENV['HOST']
-$user_streaming = true
-$deleted_streaming = true
-
-puts "TwitterController"
-
-class Tweet
-  class << self
-
-    def config
-      Twitter::Streaming::Client.new do |config|
-        config.consumer_key    = ENV["MAIN_CONSUMER_KEY"]
-        config.consumer_secret = ENV["MAIN_CONSUMER_SECRET"]
-        config.access_token    = ENV["MAIN_ACCESS_TOKEN"]
-        config.access_token_secret = ENV["MAIN_ACCESS_TOKEN_SECRET"]
-      end
-    end
-
-    def onfig_rest
-      Twitter::REST::Client.new do |config|
-        config.consumer_key    = ENV["MAIN_CONSUMER_KEY"]
-        config.consumer_secret = ENV["MAIN_CONSUMER_SECRET"]
-        config.access_token    = ENV["MAIN_ACCESS_TOKEN"]
-        config.access_token_secret = ENV["MAIN_ACCESS_TOKEN_SECRET"]
-      end
-    end
 
     def slack_post(attachments)
       conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
