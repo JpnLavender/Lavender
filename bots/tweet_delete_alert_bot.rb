@@ -9,7 +9,7 @@ Tweet.config.user do |tweet|
     if "#{tweet.id}" == data.tweet_id
       puts $deleted_streaming 
       data.full_text = "Delete\n" + "#{data.full_text}"
-      $deleted_streaming ? Tweet.slack_post_options(data) : "この機能は現在停止中です"
+      Tweet.slack_post_options(data)
     else 
       # Slappy.say "誰かがつい消ししたっぽい"
     end

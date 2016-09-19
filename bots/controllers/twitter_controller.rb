@@ -35,9 +35,6 @@ class Tweet
     end
 
     def slack_post_options(tweet)
-      puts "-" * 30
-      p tweet
-      puts "+" * 30
       attachments = [{
         author_icon: tweet.user.profile_image_url.to_s,
         author_name: tweet.user.name,
@@ -77,22 +74,5 @@ class Tweet
       Tweet.config_rest.update(text)
     end
   end
-
-  class DeletedStreaming < Tweet
-    def self.stop!
-      $deleted_streaming = false
-    end
-    def self.start!
-      $deleted_streaming = true
-    end
-  end
-
-  class UserStreaming < Tweet
-     def self.stop!
-       $user_streaming = false
-    end
-    def self.start!
-      $user_streaming = true
-    end
-  end
 end
+

@@ -9,8 +9,10 @@ Tweet.config.user do |tweet|
     Tweet.database_post(tweet)
     case tweet.user.screen_name
     when *favo_user
-      $user_streaming ? Tweet.slack_post_options(tweet) : "この機能は現在停止中です"
-      Tweet.config_rest.favorite(tweet.id)
+      if tweet.full_text =~ /^RT/ 
+        Tweet.slack_post_options(tweet)
+        # Tweet.config_rest.favorite(tweet.id)
+      end
     end
   end
 end
