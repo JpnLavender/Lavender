@@ -3,7 +3,6 @@ require 'curb'
 require 'hashie'
 require "active_record"
 require './models.rb'
-$host = ENV['HOST']
 
 class TweetDeleteChecker
 
@@ -14,12 +13,13 @@ class TweetDeleteChecker
     @favo_user = nil
   end
   attr_reader :config, :rest, :stream
-  attr_accessor :favo_user 
-
-  @favo_user = @rest.list_members(763286476729704449, count: 1000).map{ |user| user.screen_name }
 
   def run
     streaming_run
+  end
+
+  def favo_user 
+    @favo_user = @rest.list_members(763286476729704449, count: 1000).map{ |user| user.screen_name }
   end
 
   def slack_post(tweet)
@@ -37,8 +37,8 @@ class TweetDeleteChecker
         attachments[i].merge!({image_url: v.media_uri })
       end
     end
-    conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
-    Curl.post( ENV['WEBHOOKS'], JSON.pretty_generate(conf) )
+    conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge({attachments: attachments})
+    Curl.post( ENV['WEBHOOKS'], conf.to_json )
     puts JSON.pretty_generate(conf)
   end
 
