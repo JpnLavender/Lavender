@@ -9,7 +9,7 @@ Tweet.config.user do |tweet|
     Tweet.database_post(tweet)
     case tweet.user.screen_name
     when *favo_user
-      if tweet.full_text =~ /^RT/ 
+      unless tweet.full_text =~ /^RT/ 
         Tweet.slack_post_options(tweet)
         # Tweet.config_rest.favorite(tweet.id)
       end
