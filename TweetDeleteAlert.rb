@@ -1,6 +1,9 @@
 require 'twitter'
 require 'curb'
 require 'hashie'
+require "active_record"
+require './models.rb'
+
 $host = ENV['HOST']
 
 class TweetDeleteChecker
@@ -45,17 +48,34 @@ class TweetDeleteChecker
   end
 
   def database_post(tweet)
-    Curl.post(
-      "#{$host}/stocking_tweet",
-      ({ 
-        tweet_id: tweet.id,
-        name: tweet.user.screen_name,
-        user_name: tweet.user.name,
-        text: tweet.full_text,
-        icon: tweet.user.profile_image_url,
-        url:tweet.uri, 
-        color: tweet.user.profile_link_color
-      }).to_json)
+    Tweet.create( 
+                 tweet_id: tweet.id,
+                 screen_name: tweet.user.screen_name,
+                 user_name: tweet.user.name,
+                 text: tweet.full_text,
+                 icon: tweet.user.profile_image_url,
+                 url:tweet.uri, 
+                 color: tweet.user.profile_link_color
+                )
+  end
+
+  def tweet_data(id)
+    if tweet = Tweet.find_by(tweet_id: id)
+      {
+        tweet_id: tweet.tweet_id,
+        full_text: tweet.text,
+        uri: tweet.url,
+        media: nil,
+        user: {
+          name: tweet.screen_name,
+          screen_name: tweet.user_name,
+          profile_image_url: tweet.icon,
+          profile_link_color: tweet.color
+        }
+      }
+    else
+      {error: "404"}
+    end
   end
 
   def streaming_run
@@ -70,7 +90,7 @@ class TweetDeleteChecker
           end
         end
       elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)
-        data = Hashie::Mash.new(JSON.parse(Curl.get("#{$host}/Lavender/find_tweet/#{tweet.id}").body_str))
+        data = Hashie::Mash.new(tweet_data(tweet.id))
         if "#{tweet.id}" == data.tweet_id
           data.full_text = "Delete\n" + "#{data.full_text}"
           slack_post_options(data)
