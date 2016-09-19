@@ -1,3 +1,5 @@
+require 'twitter'
+
 class BinjyouBot
 
   def initialize(config)

@@ -1,3 +1,5 @@
+require 'twitter'
+
 class AyaminBot
 
   def initialize(config)
