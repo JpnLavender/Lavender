@@ -11,24 +11,18 @@ class TweetDeleteChecker
     @config = config
     @rest   = Twitter::REST::Client.new(@config)
     @stream = Twitter::Streaming::Client.new(@config)
+    @favo_user = nil
   end
   attr_reader :config, :rest, :stream
+  attr_accessor :favo_user 
+
+  @favo_user = @rest.list_members(763286476729704449, count: 1000).map{ |user| user.screen_name }
 
   def run
     streaming_run
   end
 
-  def favo_user 
-    @rest.list_members(763286476729704449, count: 1000).map{ |user| user.screen_name }
-  end
-
-  def slack_post(attachments)
-    conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
-    Curl.post( ENV['WEBHOOKS'], JSON.pretty_generate(conf) )
-    puts JSON.pretty_generate(conf)
-  end
-
-  def slack_post_options(tweet)
+  def slack_post(tweet)
     attachments = [{
       author_icon:    tweet.user.profile_image_url.to_s,
       author_name:    tweet.user.name,
@@ -43,7 +37,9 @@ class TweetDeleteChecker
         attachments[i].merge!({image_url: v.media_uri })
       end
     end
-    slack_post({attachments: attachments})
+    conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
+    Curl.post( ENV['WEBHOOKS'], JSON.pretty_generate(conf) )
+    puts JSON.pretty_generate(conf)
   end
 
   def database_post(tweet)
@@ -83,12 +79,12 @@ class TweetDeleteChecker
         database_post(tweet)
         next unless favo_user.include?(tweet.user.screen_name)
         next if tweet.full_text =~ /^RT/ 
-        slack_post_options(tweet)
+        slack_post(tweet)
       elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)
         data = Hashie::Mash.new(tweet_data(tweet.id))
         next unless "#{tweet.id}" == data.tweet_id
         data.full_text = "Delete\n" + "#{data.full_text}"
-        slack_post_options(data)
+        slack_post(data)
       end
     end
   end
