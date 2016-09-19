@@ -10,7 +10,7 @@ puts "TwitterController"
 class Tweet
   class << self
 
-    def main_config
+    def config
       Twitter::Streaming::Client.new do |config|
         config.consumer_key    = ENV["MAIN_CONSUMER_KEY"]
         config.consumer_secret = ENV["MAIN_CONSUMER_SECRET"]
@@ -19,7 +19,7 @@ class Tweet
       end
     end
 
-    def main_config_rest
+    def onfig_rest
       Twitter::REST::Client.new do |config|
         config.consumer_key    = ENV["MAIN_CONSUMER_KEY"]
         config.consumer_secret = ENV["MAIN_CONSUMER_SECRET"]
@@ -27,25 +27,6 @@ class Tweet
         config.access_token_secret = ENV["MAIN_ACCESS_TOKEN_SECRET"]
       end
     end
-
-    def sub_config
-      Twitter::Streaming::Client.new do |config|
-        config.consumer_key    = ENV["SUB_CONSUMER_KEY"]
-        config.consumer_secret = ENV["SUB_CONSUMER_SECRET"]
-        config.access_token    = ENV["SUB_ACCESS_TOKEN"]
-        config.access_token_secret = ENV["SUB_ACCESS_TOKEN_SECRET"]
-      end
-    end
-
-    def sub_config_rest
-      Twitter::REST::Client.new do |config|
-        config.consumer_key    = ENV["SUB_CONSUMER_KEY"]
-        config.consumer_secret = ENV["SUB_CONSUMER_SECRET"]
-        config.access_token    = ENV["SUB_ACCESS_TOKEN"]
-        config.access_token_secret = ENV["SUB_ACCESS_TOKEN_SECRET"]
-      end
-    end
-
 
     def slack_post(attachments)
       conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge(attachments)
