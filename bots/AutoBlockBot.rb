@@ -26,11 +26,8 @@ class AutoBlockBot
   def event_stream
     @stream.user do |event|
       next unless event.is_a?(Twitter::Streaming::Event)
-      puts "1"
       next unless @events.include?(event.name)
-      puts "2"
       next if follow_list.include?(event.source.id)
-      puts "move function user_block"
       user_block(event.source.id)
     end
   end
