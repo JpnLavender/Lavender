@@ -75,16 +75,20 @@ class TweetDeleteChecker
 
   def streaming_run
     @stream.user do |tweet|
-      if tweet.is_a?(Twitter::Tweet)
-        database_post(tweet)
-        next unless favo_user.include?(tweet.user.screen_name)
-        next if tweet.full_text =~ /^RT/ 
-        slack_post(tweet)
-      elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)
-        data = Hashie::Mash.new(tweet_data(tweet.id))
-        next unless "#{tweet.id}" == data.tweet_id
-        data.full_text = "Delete\n" + "#{data.full_text}"
-        slack_post(data)
+      begin
+        if tweet.is_a?(Twitter::Tweet)
+          database_post(tweet)
+          next unless favo_user.include?(tweet.user.screen_name)
+          next if tweet.full_text =~ /^RT/ 
+          slack_post(tweet)
+        elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)
+          data = Hashie::Mash.new(tweet_data(tweet.id))
+          next unless "#{tweet.id}" == data.tweet_id
+          data.full_text = "Delete\n" + "#{data.full_text}"
+          slack_post(data)
+        end
+      rescue
+        run
       end
     end
   end
