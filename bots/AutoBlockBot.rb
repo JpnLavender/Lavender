@@ -24,11 +24,15 @@ class AutoBlockBot
   end
 
   def event_stream
-    @stream.user do |event|
-      next unless event.is_a?(Twitter::Streaming::Event)
-      next unless @events.include?(event.name)
-      next if follow_list.include?(event.source.id)
-      user_block(event.source.id)
+    begin
+      @stream.user do |event|
+        next unless event.is_a?(Twitter::Streaming::Event)
+        next unless @events.include?(event.name)
+        next if follow_list.include?(event.source.id)
+        user_block(event.source.id)
+      end
+    rescue
+      run
     end
   end
 
