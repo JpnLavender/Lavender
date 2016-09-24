@@ -10,16 +10,11 @@ class TweetDeleteChecker
     @config = config
     @rest   = Twitter::REST::Client.new(@config)
     @stream = Twitter::Streaming::Client.new(@config)
-    @favo_user = nil
   end
   attr_reader :config, :rest, :stream
 
   def run
     streaming_run
-  end
-
-  def favo_user 
-    @favo_user = @rest.list_members(763286476729704449, count: 1000).map{ |user| user.screen_name }
   end
 
   def slack_post(tweet)
@@ -78,7 +73,6 @@ class TweetDeleteChecker
       begin
         if tweet.is_a?(Twitter::Tweet)
           database_post(tweet)
-          next unless favo_user.include?(tweet.user.screen_name)
           next if tweet.full_text =~ /^RT/ 
           slack_post(tweet)
         elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)

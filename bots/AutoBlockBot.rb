@@ -18,16 +18,21 @@ class AutoBlockBot
   end
 
   def user_block(id)
+    data = @rest.status(id)
     @rest.block(id)
-    puts "SuccessUserBlock!"
+    puts "SuccessUserBlock! at #{data.user.name}"
   end
 
   def event_stream
-    @stream.user do |event|
-      next unless event.is_a?(Twitter::Streaming::Event)
-      next unless @events.include?(event.name)
-      next if follow_list.include?(event.source.id)
-      user_block(event.source.id)
+    begin
+      @stream.user do |event|
+        next unless event.is_a?(Twitter::Streaming::Event)
+        next unless @events.include?(event.name)
+        next if follow_list.include?(event.source.id)
+        user_block(event.source.id)
+      end
+    rescue
+      run
     end
   end
 
