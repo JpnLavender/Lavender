@@ -20,7 +20,7 @@ class AutoBlockBot
   def user_block(id)
     begin
       @rest.block(id)
-      puts "SuccessUserBlock! at @#{@rest.user(id).screen_name}"
+      @rest.update("SuccessUserBlock! at @#{@rest.user(id).screen_name}")
     rescue
       puts "Block Error"
     end
