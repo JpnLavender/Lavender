@@ -18,9 +18,8 @@ class AutoBlockBot
   end
 
   def user_block(id)
-    data = @rest.status(id)
     @rest.block(id)
-    puts "SuccessUserBlock! at #{data.user.name}"
+    puts "SuccessUserBlock! at @#{@rest.user(id).screen_name}"
   end
 
   def event_stream
