@@ -34,10 +34,10 @@ class AutoBlockBot
 end
 
 CONFIG = {
-  consumer_key: ENV["SUB_CONSUMER_KEY"],
-  consumer_secret: ENV["SUB_CONSUMER_SECRET"],
-  access_token: ENV["SUB_ACCESS_TOKEN"],
-  access_token_secret: ENV["SUB_ACCESS_TOKEN_SECRET"]
+  consumer_key: ENV["MAIN_CONSUMER_KEY"],
+  consumer_secret: ENV["MAIN_CONSUMER_SECRET"],
+  access_token: ENV["MAIN_ACCESS_TOKEN"],
+  access_token_secret: ENV["MAIN_ACCESS_TOKEN_SECRET"]
 }
 
 app = AutoBlockBot.new(CONFIG)
