@@ -18,8 +18,12 @@ class AutoBlockBot
   end
 
   def user_block(id)
-    @rest.block(id)
-    puts "SuccessUserBlock! at @#{@rest.user(id).screen_name}"
+    begin
+      @rest.block(id)
+      puts "SuccessUserBlock! at @#{@rest.user(id).screen_name}"
+    rescue
+      puts "Block Error"
+    end
   end
 
   def event_stream
