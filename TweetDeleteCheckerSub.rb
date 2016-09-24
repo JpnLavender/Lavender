@@ -10,7 +10,6 @@ class TweetDeleteChecker
     @config = config
     @rest   = Twitter::REST::Client.new(@config)
     @stream = Twitter::Streaming::Client.new(@config)
-    @favo_user = nil
   end
   attr_reader :config, :rest, :stream
 
@@ -71,15 +70,19 @@ class TweetDeleteChecker
 
   def streaming_run
     @stream.user do |tweet|
-      if tweet.is_a?(Twitter::Tweet)
-        database_post(tweet)
-        next if tweet.full_text =~ /^RT/ 
-        slack_post(tweet)
-      elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)
-        data = Hashie::Mash.new(tweet_data(tweet.id))
-        next unless "#{tweet.id}" == data.tweet_id
-        data.full_text = "Delete\n" + "#{data.full_text}"
-        slack_post(data)
+      begin
+        if tweet.is_a?(Twitter::Tweet)
+          database_post(tweet)
+          next if tweet.full_text =~ /^RT/ 
+          slack_post(tweet)
+        elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)
+          data = Hashie::Mash.new(tweet_data(tweet.id))
+          next unless "#{tweet.id}" == data.tweet_id
+          data.full_text = "Delete\n" + "#{data.full_text}"
+          slack_post(data)
+        end
+      rescue
+        run
       end
     end
   end
@@ -87,10 +90,10 @@ class TweetDeleteChecker
 end
 
 CONFIG = {
-  consumer_key:        ENV["MAIN_CONSUMER_KEY"],
-  consumer_secret:     ENV["MAIN_CONSUMER_SECRET"],
-  access_token:        ENV["MAIN_ACCESS_TOKEN"],
-  access_token_secret: ENV["MAIN_ACCESS_TOKEN_SECRET"]
+  consumer_key:        ENV["SUB_CONSUMER_KEY"],
+  consumer_secret:     ENV["SUB_CONSUMER_SECRET"],
+  access_token:        ENV["SUB_ACCESS_TOKEN"],
+  access_token_secret: ENV["SUB_ACCESS_TOKEN_SECRET"]
 }
 
 app = TweetDeleteChecker.new(CONFIG)
