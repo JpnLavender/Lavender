@@ -73,6 +73,7 @@ class TweetDeleteChecker
       begin
         if tweet.is_a?(Twitter::Tweet)
           database_post(tweet)
+          slack_post(tweet) if tweet.full_text =~ /はにゅ|Hibiscus7390/ 
           next if tweet.full_text =~ /^RT/ 
           slack_post(tweet)
         elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)
