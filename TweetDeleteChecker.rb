@@ -10,16 +10,12 @@ class TweetDeleteChecker
     @config = config
     @rest   = Twitter::REST::Client.new(@config)
     @stream = Twitter::Streaming::Client.new(@config)
-    @favo_user = nil
+    @favo_user = @rest.list_members(763286476729704449, count: 1000).map{ |user| user.screen_name }
   end
   attr_reader :config, :rest, :stream
 
   def run
     streaming_run
-  end
-
-  def favo_user 
-    @favo_user = @rest.list_members(763286476729704449, count: 1000).map{ |user| user.screen_name }
   end
 
   def slack_post(tweet)
@@ -75,20 +71,17 @@ class TweetDeleteChecker
 
   def streaming_run
     @stream.user do |tweet|
-      begin
-        if tweet.is_a?(Twitter::Tweet)
-          database_post(tweet)
-          next unless favo_user.include?(tweet.user.screen_name)
-          next if tweet.full_text =~ /^RT/ 
-          slack_post(tweet)
-        elsif tweet.is_a?(Twitter::Streaming::DeletedTweet)
-          data = Hashie::Mash.new(tweet_data(tweet.id))
-          next unless "#{tweet.id}" == data.tweet_id
-          data.full_text = "Delete\n" + "#{data.full_text}"
-          slack_post(data)
-        end
-      rescue
-        run
+      case tweet
+      when Twitter::Tweet
+        database_post(tweet)
+        next unless @favo_user.include?(tweet.user.screen_name)
+        next if tweet.full_text =~ /^RT/ 
+        slack_post(tweet)
+      when Twitter::Streaming::DeletedTweet
+        data = Hashie::Mash.new(tweet_data(tweet.id))
+        next unless "#{tweet.id}" == data.tweet_id
+        data.full_text = "Delete\n" + "#{data.full_text}"
+        slack_post(data)
       end
     end
   end
@@ -96,10 +89,10 @@ class TweetDeleteChecker
 end
 
 CONFIG = {
-  consumer_key:        ENV["SUB_CONSUMER_KEY"],
-  consumer_secret:     ENV["SUB_CONSUMER_SECRET"],
-  access_token:        ENV["SUB_ACCESS_TOKEN"],
-  access_token_secret: ENV["SUB_ACCESS_TOKEN_SECRET"]
+  consumer_key:        ENV["MAIN_CONSUMER_KEY"],
+  consumer_secret:     ENV["MAIN_CONSUMER_SECRET"],
+  access_token:        ENV["MAIN_ACCESS_TOKEN"],
+  access_token_secret: ENV["MAIN_ACCESS_TOKEN_SECRET"]
 }
 
 app = TweetDeleteChecker.new(CONFIG)
