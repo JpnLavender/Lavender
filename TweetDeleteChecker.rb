@@ -74,8 +74,10 @@ class TweetDeleteChecker
       case tweet
       when Twitter::Tweet
         database_post(tweet)
-        next unless @favo_user.include?(tweet.user.screen_name)
-        next if tweet.full_text =~ /^RT/ 
+        unless tweet.full_text =~ /はにゅ|社畜/
+          next unless @favo_user.include?(tweet.user.screen_name)
+          next if tweet.full_text =~ /^RT/ 
+        end
         slack_post(tweet)
       when Twitter::Streaming::DeletedTweet
         data = Hashie::Mash.new(tweet_data(tweet.id))
