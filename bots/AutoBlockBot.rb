@@ -1,4 +1,5 @@
 require 'twitter'
+require 'curb'
 
 class AutoBlockBot
   def initialize(config)
@@ -19,8 +20,14 @@ class AutoBlockBot
 
   def user_block(id)
     begin
-      @rest.block(id)
       @rest.update("SuccessUserBlock! at @#{@rest.user(id).screen_name}")
+      Curl.post(ENV['WEBHOOKS'], {
+        channel: "#bot_tech",
+        username: "UserBlocker",
+        icon_url: "http://usedoor.jp/wp-content/uploads/2016/06/twitter-app-block-thum.png",
+        text: "#{@rest.user(id).screen_name}をブロックしました"
+      }.to_json)
+      @rest.block(id)
     rescue
       puts "Block Error"
     end
