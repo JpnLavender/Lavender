@@ -6,7 +6,7 @@ class AutoBlockBot
     @config = config
     @rest = Twitter::REST::Client.new(@config)
     @stream = Twitter::Streaming::Client.new(@config)
-    @events = [:follow, :unfollow].freeze
+    @events = [:follow, :unfollow, :favorite].freeze
   end
   attr_reader :config, :rest, :stream, :events
 
