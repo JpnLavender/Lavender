@@ -6,7 +6,7 @@ class AutoBlockBot
     @config = config
     @rest = Twitter::REST::Client.new(@config)
     @stream = Twitter::Streaming::Client.new(@config)
-    @events = [:follow, :unfollow, :favorite].freeze
+    @events = [:follow, :unfollow, :favorite, :retweet].freeze
   end
   attr_reader :config, :rest, :stream, :events
 
@@ -20,7 +20,7 @@ class AutoBlockBot
 
   def user_block(id)
     begin
-      @rest.update("SuccessUserBlock! at @#{@rest.user(id).screen_name}")
+      @rest.update("Success User Block! at @#{@rest.user(id).screen_name}")
       Curl.post(ENV['WEBHOOKS'], {
         channel: "#bot_tech",
         username: "UserBlocker",
