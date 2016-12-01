@@ -73,10 +73,10 @@ class TweetDeleteChecker
     @stream.user do |tweet|
       case tweet
       when Twitter::Tweet
-        database_post(tweet)
         unless tweet.full_text =~ /はにゅ|社畜/
           next unless @favo_user.include?(tweet.user.screen_name)
           next if tweet.full_text =~ /^RT/ 
+          database_post(tweet)
         end
         slack_post(tweet)
       when Twitter::Streaming::DeletedTweet
