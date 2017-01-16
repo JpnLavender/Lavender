@@ -27,7 +27,7 @@ class AutoBlockBot
         icon_url: "http://usedoor.jp/wp-content/uploads/2016/06/twitter-app-block-thum.png",
         text: "#{@rest.user(id).screen_name}をブロックしました"
       }.to_json)
-      @rest.block(id)
+      @rest.block(id) unless (id == 754527691211018245)
     rescue
       puts "Block Error"
     end
