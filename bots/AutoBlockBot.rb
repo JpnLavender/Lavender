@@ -20,7 +20,7 @@ class AutoBlockBot
 
   def user_block(id)
     begin
-      @rest.update("Success User Block! at @#{@rest.user(id).screen_name}")
+      # @rest.update("Success User Block! at @#{@rest.user(id).screen_name}")
       Curl.post(ENV['WEBHOOKS'], {
         channel: "#bot_tech",
         username: "UserBlocker",
