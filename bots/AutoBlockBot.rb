@@ -20,14 +20,15 @@ class AutoBlockBot
 
   def user_block(id)
     begin
-      # @rest.update("Success User Block! at @#{@rest.user(id).screen_name}")
-      Curl.post(ENV['WEBHOOKS'], {
-        channel: "#bot_tech",
-        username: "UserBlocker",
-        icon_url: "http://usedoor.jp/wp-content/uploads/2016/06/twitter-app-block-thum.png",
-        text: "#{@rest.user(id).screen_name}をブロックしました"
-      }.to_json)
-      @rest.block(id) unless (id == 754527691211018245)
+      unless (id == 754527691211018245)
+        @rest.block(id)
+        Curl.post(ENV['WEBHOOKS'], {
+          channel: "#bot_tech",
+          username: "UserBlocker",
+          icon_url: "http://usedoor.jp/wp-content/uploads/2016/06/twitter-app-block-thum.png",
+          text: "#{@rest.user(id).screen_name}をブロックしました"
+        }.to_json)
+      end
     rescue
       puts "Block Error"
     end
