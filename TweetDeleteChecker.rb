@@ -25,7 +25,10 @@ class TweetDeleteChecker
         attachments[i].merge!({image_url: v.media_uri })
       end
     end
-    conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge({attachments: attachments})
+    conf = { 
+      channel: ENV.fetch("SLACK_POST_CHANNEL"), 
+      username: ENV.fetch("SLACK_USERNAME"), 
+    }.merge({attachments: attachments})
     Curl.post( ENV.fetch('WEBHOOKS'), conf.to_json )
     puts JSON.pretty_generate(conf)
     puts "FINISH: SlackPost"
@@ -67,15 +70,19 @@ class TweetDeleteChecker
   def streaming_run
     puts "RUN: Striaming"
     @stream.user do |tweet|
-      case tweet
-      when Twitter::Tweet
-        next if tweet.full_text =~ /^RT/ 
-        database_post(tweet)
-      when Twitter::Streaming::DeletedTweet
-        data = Hashie::Mash.new(tweet_data(tweet.id))
-        next unless "#{tweet.id}" == data.tweet_id
-        data.full_text = "Delete\n" + "#{data.full_text}"
-        slack_post(data)
+      begin
+        case tweet
+        when Twitter::Tweet
+          next if tweet.full_text =~ /^RT/ 
+          database_post(tweet)
+        when Twitter::Streaming::DeletedTweet
+          data = Hashie::Mash.new(tweet_data(tweet.id))
+          next unless "#{tweet.id}" == data.tweet_id
+          data.full_text = "Delete\n" + "#{data.full_text}"
+          slack_post(data)
+        end
+      rescue
+        next
       end
     end
   end
