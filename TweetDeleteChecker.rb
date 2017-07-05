@@ -1,7 +1,3 @@
-require 'twitter'
-require 'curb'
-require 'hashie'
-require "active_record"
 require './models.rb'
 
 class TweetDeleteChecker
@@ -10,15 +6,11 @@ class TweetDeleteChecker
     @config = config
     @rest   = Twitter::REST::Client.new(@config)
     @stream = Twitter::Streaming::Client.new(@config)
-    @favo_user = @rest.list_members(763286476729704449, count: 1000).map{ |user| user.screen_name }
   end
   attr_reader :config, :rest, :stream
 
-  def run
-    streaming_run
-  end
-
   def slack_post(tweet)
+    puts "RUN: SlackPost"
     attachments = [{
       author_icon:    tweet.user.profile_image_url.to_s,
       author_name:    tweet.user.name,
@@ -34,20 +26,23 @@ class TweetDeleteChecker
       end
     end
     conf = { channel: "#bot_tech", username: "Lavender", icon_url: "http://19.xmbs.jp/img_fget.php/_bopic_/923/e05cec.png"}.merge({attachments: attachments})
-    Curl.post( ENV['WEBHOOKS'], conf.to_json )
+    Curl.post( ENV.fetch('WEBHOOKS'), conf.to_json )
     puts JSON.pretty_generate(conf)
+    puts "FINISH: SlackPost"
   end
 
   def database_post(tweet)
+    puts "RUN: SaveTweet"
     Tweet.create( 
                  tweet_id:    tweet.id,
                  screen_name: tweet.user.screen_name,
                  user_name:   tweet.user.name,
                  text:        tweet.full_text,
-                 icon:        tweet.user.profile_image_url,
+                 img_url:        tweet.user.profile_image_url,
                  url:         tweet.uri, 
                  color:       tweet.user.profile_link_color
                 )
+    puts "FINISH: SaveTweet"
   end
 
   def tweet_data(id)
@@ -60,7 +55,7 @@ class TweetDeleteChecker
         user: {
           name:               tweet.screen_name,
           screen_name:        tweet.user_name,
-          profile_image_url:  tweet.icon,
+          profile_image_url:  tweet.img_url,
           profile_link_color: tweet.color
         }
       }
@@ -70,15 +65,12 @@ class TweetDeleteChecker
   end
 
   def streaming_run
+    puts "RUN: Striaming"
     @stream.user do |tweet|
       case tweet
       when Twitter::Tweet
-        unless tweet.full_text =~ /はにゅ|社畜/
-          next unless @favo_user.include?(tweet.user.screen_name)
-          next if tweet.full_text =~ /^RT/ 
-          database_post(tweet)
-        end
-        slack_post(tweet)
+        next if tweet.full_text =~ /^RT/ 
+        database_post(tweet)
       when Twitter::Streaming::DeletedTweet
         data = Hashie::Mash.new(tweet_data(tweet.id))
         next unless "#{tweet.id}" == data.tweet_id
@@ -91,11 +83,11 @@ class TweetDeleteChecker
 end
 
 CONFIG = {
-  consumer_key:        ENV["MAIN_CONSUMER_KEY"],
-  consumer_secret:     ENV["MAIN_CONSUMER_SECRET"],
-  access_token:        ENV["MAIN_ACCESS_TOKEN"],
-  access_token_secret: ENV["MAIN_ACCESS_TOKEN_SECRET"]
+  consumer_key:        ENV.fetch("CONSUMER_KEY"),
+  consumer_secret:     ENV.fetch("CONSUMER_SECRET"),
+  access_token:        ENV.fetch("ACCESS_TOKEN"),
+  access_token_secret: ENV.fetch("ACCESS_TOKEN_SECRET")
 }
 
 app = TweetDeleteChecker.new(CONFIG)
-app.run
+app.streaming_run

@@ -1,12 +1,14 @@
 require 'bundler/setup'
 Bundler.require
+
+# p ActiveRecord::Base.configurations = YAML.load_file('database.yml')
+# ActiveRecord::Base.establish_connection(ENV['RACK_ENV'])
+
+config = YAML.load_file( './database.yml' )
+ActiveRecord::Base.establish_connection(config["development"])
+
 after do
   ActiveRecord::Base.connection.close
 end
 
-if development?
-  ActiveRecord::Base.establish_connection("sqlite3:db/development.db")
-end
-
-class Tweet < ActiveRecord::Base
-end
+class Tweet < ActiveRecord::Base; end
